@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enrollment</title>
+</head>
+<body>
+
+<h2>Add Enrollment</h2>
+
+{% if error %}
+    <p style="color:red; font-weight:bold;">
+        {{ error }}
+    </p>
+{% endif %}
+
+<form method="POST">
+    <input type="hidden" name="add_enrollment" value="1">
+
+    <label>Person:</label>
+    <select name="person_id" required>
+        {% for p in persons %}
+            <option value="{{ p[0] }}">{{ p[1] }} {{ p[2] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label>Institution:</label>
+    <select name="institution_id" required>
+        {% for i in institutions %}
+            <option value="{{ i[0] }}">{{ i[1] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label>Course:</label>
+    <select name="course_id" required>
+        {% for c in courses %}
+            <option value="{{ c[0] }}">{{ c[1] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label>Date:</label>
+    <input type="date" name="enrollment_date" required><br><br>
+
+    <button type="submit">Add Enrollment</button>
+</form>
+
+<hr>
+
+<h2>Enrollment Records</h2>
+
+<!-- SEARCH BAR -->
+<label>Search:</label>
+<input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search enrollments..."><br><br>
+
+<table border="1" cellpadding="5" id="enrollmentTable">
+<tr>
+    <th>ID</th>
+    <th>Person</th>
+    <th>Institution</th>
+    <th>Course</th>
+    <th>Date</th>
+    <th>Actions</th>
+</tr>
+
+{% for r in records %}
+<tr>
+    <td>{{ r[0] }}</td>
+    <td>{{ r[1] }}</td>
+    <td>{{ r[2] }}</td>
+    <td>{{ r[3] }}</td>
+    <td>{{ r[4] }}</td>
+    <td>
+
+        <!-- EDIT BUTTON -->
+        <button onclick="openEdit('{{ r[0] }}', '{{ r[4] }}')">Edit</button>
+
+        <!-- DELETE BUTTON -->
+        <button onclick="confirmDelete('{{ r[0] }}')">Delete</button>
+
+        <!-- COMPLETE / GRADUATE BUTTON -->
+        <button onclick="completeGraduate('{{ r[0] }}')">Completed</button>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- DELETE FORM -->
+<form method="POST" id="deleteForm">
+    <input type="hidden" name="delete_id" id="delete_id">
+</form>
+
+<!-- GRADUATE FORM -->
+<form method="POST" id="graduateForm" action="/add_graduate" style="display:none;">
+    <input type="hidden" name="enrollment_id" id="grad_enroll_id">
+    <input type="hidden" name="graduation_date" id="grad_date">
+</form>
+
+<!-- EDIT FORM (POPUP STYLE) -->
+<div id="editBox" style="display:none; border:1px solid black; padding:10px; background:#eee;">
+    <h3>Edit Enrollment</h3>
+
+    <form method="POST">
+        <input type="hidden" name="edit_id" id="edit_id">
+
+        <label>Institution:</label>
+        <select name="institution_id" required>
+            {% for i in institutions %}
+                <option value="{{ i[0] }}">{{ i[1] }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Course:</label>
+        <select name="course_id" required>
+            {% for c in courses %}
+                <option value="{{ c[0] }}">{{ c[1] }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Date:</label>
+        <input type="date" name="enrollment_date" id="edit_date" required><br><br>
+
+        <button type="submit">Confirm Update</button>
+        <button type="button" onclick="closeEdit()">Cancel</button>
+    </form>
+</div>
+
+<script>
+function confirmDelete(id){
+    if(confirm("Are you sure you want to delete this enrollment?")){
+        document.getElementById("delete_id").value = id;
+        document.getElementById("deleteForm").submit();
+    }
+}
+
+function openEdit(id, date){
+    document.getElementById("edit_id").value = id;
+    document.getElementById("edit_date").value = date;
+    document.getElementById("editBox").style.display = "block";
+}
+
+function closeEdit(){
+    document.getElementById("editBox").style.display = "none";
+}
+
+// COMPLETED / GRADUATE BUTTON FUNCTION
+function completeGraduate(enrollId){
+    const gradDate = prompt("Enter graduation date (YYYY-MM-DD)", new Date().toISOString().slice(0,10));
+    if(gradDate){
+        document.getElementById("grad_enroll_id").value = enrollId;
+        document.getElementById("grad_date").value = gradDate;
+        document.getElementById("graduateForm").submit();
+    }
+}
+
+// SEARCH FUNCTION
+function searchTable(){
+    const input = document.getElementById("searchInput");
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("enrollmentTable");
+    const rows = table.getElementsByTagName("tr");
+
+    for(let i=1; i<rows.length; i++){
+        const txt = rows[i].textContent.toLowerCase();
+        rows[i].style.display = txt.includes(filter) ? "" : "none";
+    }
+}
+</script>
+
+</body>
+</html>

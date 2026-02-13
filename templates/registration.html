@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Youth Registration</title>
+</head>
+<body>
+
+<h2>Youth Registration</h2>
+
+{% if error %}
+    <p style="color:red; font-weight:bold;">
+        {{ error }}
+    </p>
+{% endif %}
+
+<form method="POST">
+
+    <h3>Part 1: Bio Information</h3>
+
+    <label>First Name:</label>
+    <input type="text" name="first_name" required><br><br>
+
+    <label>Middle Name:</label>
+    <input type="text" name="middle_name"><br><br>
+
+    <label>Last Name:</label>
+    <input type="text" name="last_name" required><br><br>
+
+    <label>Date of Birth:</label>
+    <input type="date" name="dob" required><br><br>
+
+    <label>Gender:</label>
+    <select name="gender" required>
+        <option value="">--Select--</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select><br><br>
+
+    <label>Phone:</label>
+    <input type="text" name="phone"><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email"><br><br>
+
+
+    <h3>Part 2: Enrollment Information</h3>
+
+    <label>Institution:</label>
+    <select name="institution_id" required>
+        <option value="">--Select Institution--</option>
+        {% for inst in institutions %}
+            <option value="{{ inst[0] }}">{{ inst[1] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label>Course:</label>
+    <select name="course_id" required>
+        <option value="">--Select Course--</option>
+        {% for course in courses %}
+            <option value="{{ course[0] }}">{{ course[1] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label>Enrollment Date:</label>
+    <input type="date" name="enrollment_date" required><br><br>
+
+    <button type="submit">Submit Registration</button>
+
+</form>
+
+</body>
+</html>

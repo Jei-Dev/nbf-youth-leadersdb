@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graduates</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+    <script>
+        function searchTable() {
+            const input = document.getElementById("searchInput");
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("graduatesTable");
+            const rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) {
+                let txt = rows[i].textContent.toLowerCase();
+                rows[i].style.display = txt.includes(filter) ? "" : "none";
+            }
+        }
+
+        function printCertificate(uniqueNumber) {
+            alert("Printing certificate for: " + uniqueNumber);
+            // Here you can implement actual PDF generation or printing
+        }
+    </script>
+</head>
+<body>
+
+<h2>Graduates List</h2>
+
+<input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search graduates..."><br><br>
+
+<table id="graduatesTable">
+    <tr>
+        <th>Graduate ID</th>
+        <th>Name</th>
+        <th>Institution</th>
+        <th>Course</th>
+        <th>Graduation Date</th>
+        <th>Action</th>
+    </tr>
+    {% for grad in graduates %}
+    <tr>
+        <td>{{ grad.unique_number }}</td>
+        <td>{{ grad.person_name }}</td>
+        <td>{{ grad.institution_name }}</td>
+        <td>{{ grad.course_name }}</td>
+        <td>{{ grad.graduation_date }}</td>
+        <td>
+            <button onclick="printCertificate('{{ grad.unique_number }}')">Print Certificate</button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
