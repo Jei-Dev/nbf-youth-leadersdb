@@ -80,7 +80,7 @@ def view_graduates():
         inst_name = grad[4]
         course_name = grad[5]
         grad_date = grad[6]
-        unique_number = f"NBF|{inst_short}{grad_date.year % 100:02d}|{course_short}{grad_id:03d}"
+        unique_number = f"NBF|{course_short}{grad_date.year % 100:02d}|{inst_short}{grad_id:03d}"
         graduates_with_number.append({
             "graduate_id": grad_id,
             "person_name": person_name,
