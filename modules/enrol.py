@@ -9,6 +9,9 @@ def enrollment():
     conn = get_connection()
     cursor = conn.cursor()
 
+    # error function
+    error = request.args.get("error")
+
     # Load dropdown data
     cursor.execute("SELECT person_id, first_name, last_name FROM Person")
     persons = cursor.fetchall()
@@ -19,7 +22,7 @@ def enrollment():
     cursor.execute("SELECT course_id, course_name, course_short_name FROM Course")
     courses = cursor.fetchall()
 
-    error = None  # for duplicate message
+    #error = None  # for duplicate message
 
     # -------- INSERT ENROLLMENT --------
     if request.method == "POST" and "add_enrollment" in request.form:
@@ -84,20 +87,25 @@ def enrollment():
 
     # -------- VIEW ENROLLMENTS WITH INNER JOIN --------
     cursor.execute("""
-        SELECT 
-            e.enrollment_id,
-            p.first_name + ' ' + p.last_name AS person_name,
-            i.institution_name,
-            i.inst_short_name,
-            c.course_name,
-            c.course_short_name,
-            e.enrollment_date
-        FROM Enrollment e
-        INNER JOIN Person p ON e.person_id = p.person_id
-        INNER JOIN Institution i ON e.institution_id = i.institution_id
-        INNER JOIN Course c ON e.course_id = c.course_id
-        ORDER BY e.enrollment_id DESC
-    """)
+    SELECT 
+        e.enrollment_id,
+        p.first_name + ' ' + p.last_name AS person_name,
+        i.institution_name,
+        i.inst_short_name,
+        c.course_name,
+        c.course_short_name,
+        e.enrollment_date,
+        CASE 
+            WHEN g.enrollment_id IS NULL THEN 0
+            ELSE 1
+        END AS is_graduated
+    FROM Enrollment e
+    INNER JOIN Person p ON e.person_id = p.person_id
+    INNER JOIN Institution i ON e.institution_id = i.institution_id
+    INNER JOIN Course c ON e.course_id = c.course_id
+    LEFT JOIN Graduate g ON e.enrollment_id = g.enrollment_id
+    ORDER BY e.enrollment_id DESC
+""")
     records = cursor.fetchall()
     conn.close()
 

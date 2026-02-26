@@ -1,28 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Settings</title>
-</head>
-<body>
-
 <h2>System Settings</h2>
 
-<h3>Add Institution</h3>
+<button onclick="openInst()">Add Institution</button>
+<button onclick="openCourse()">Add Course</button>
+
+<!-- Institution Modal -->
+<div id="instModal" style="display:none; background:#eee; padding:15px;">
 <form method="POST">
     <input type="text" name="institution_name" placeholder="Institution Name" required>
     <input type="text" name="inst_short_name" placeholder="Short Name" required>
-    <button type="submit">Add Institution</button>
+    <button type="submit">Save</button>
+    <button type="button" onclick="closeInst()">Cancel</button>
 </form>
+</div>
 
-<hr>
-
-<h3>Add Course</h3>
+<!-- Course Modal -->
+<div id="courseModal" style="display:none; background:#eee; padding:15px;">
 <form method="POST">
     <input type="text" name="course_name" placeholder="Course Name" required>
     <input type="text" name="course_short_name" placeholder="Short Name" required>
     <input type="text" name="duration" placeholder="Duration">
-    <button type="submit">Add Course</button>
+    <button type="submit">Save</button>
+    <button type="button" onclick="closeCourse()">Cancel</button>
 </form>
+</div>
 
-</body>
-</html>
+<script>
+function openInst(){ document.getElementById("instModal").style.display="block"; }
+function closeInst(){ document.getElementById("instModal").style.display="none"; }
+function openCourse(){ document.getElementById("courseModal").style.display="block"; }
+function closeCourse(){ document.getElementById("courseModal").style.display="none"; }
+</script>

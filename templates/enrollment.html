@@ -77,7 +77,16 @@
         <button onclick="confirmDelete('{{ r[0] }}')">Delete</button>
 
         <!-- COMPLETE / GRADUATE BUTTON -->
-        <button onclick="completeGraduate('{{ r[0] }}')">Completed</button>
+        {% if r[7] == 1 %}
+    <button disabled style="background:gray; color:white;">
+        Graduated
+    </button>
+{% else %}
+    <button onclick="completeGraduate('{{ r[0] }}')" 
+            style="background:green; color:white;">
+        Graduate
+    </button>
+{% endif %}
     </td>
 </tr>
 {% endfor %}
