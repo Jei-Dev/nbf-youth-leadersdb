@@ -5,6 +5,8 @@ from modules.enrol import enrol_bp
 from modules.graduate import grad_bp
 from modules.auth import auth_bp
 from config import init_mail
+from modules.dashboard import dash_bp  # or from modules.dash import dash_bp
+
 
 app = Flask(__name__)
 
@@ -20,6 +22,7 @@ app.register_blueprint(inst_bp)
 app.register_blueprint(enrol_bp)
 app.register_blueprint(grad_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(dash_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)
