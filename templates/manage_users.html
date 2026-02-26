@@ -1,135 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>User Management</title>
-
-    <style>
-        body { font-family: Arial; }
-        table { border-collapse: collapse; width: 100%; margin-top:20px; }
-        th, td { border:1px solid #ddd; padding:8px; text-align:center; }
-        th { background:#f2f2f2; }
-        button { padding:6px 10px; cursor:pointer; }
-
-        .modal {
-            display:none;
-            position:fixed;
-            top:0; left:0;
-            width:100%; height:100%;
-            background:rgba(0,0,0,0.6);
-        }
-
-        .modal-content {
-            background:white;
-            width:400px;
-            margin:10% auto;
-            padding:20px;
-            border-radius:6px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Manage Users - Youth Leaders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 </head>
-<body>
 
-<h2>User Management (Admin Only)</h2>
+<body class="bg-[#f5fafc] font-sans">
 
-<button onclick="openModal()">+ Create User</button>
+<div class="container mx-auto p-6">
 
-<!-- ================= CREATE USER MODAL ================= -->
-<div id="userModal" class="modal">
-    <div class="modal-content">
-        <h3>Create User</h3>
+  <h2 class="text-2xl font-bold text-[#093045] mb-6">
+    Manage Users
+  </h2>
 
-        <form method="POST">
-            <input type="hidden" name="action" value="create">
+  <!-- Add User Card -->
+  <div class="bg-white p-6 rounded-xl shadow mb-6">
+    <h3 class="text-xl font-semibold mb-4 text-[#093045]">Add New User</h3>
 
-            <select name="person_id" required>
-                <option value="">-- Select Enrolled Member --</option>
-                {% for p in persons %}
-                <option value="{{ p[0] }}">{{ p[1] }}</option>
-                {% endfor %}
-            </select><br><br>
+    <form method="POST" class="grid md:grid-cols-3 gap-4">
 
-            <input type="text" name="username" placeholder="Username" required><br><br>
-            <input type="email" name="email" placeholder="Email" required><br><br>
-            <input type="password" name="password" placeholder="Password" required><br><br>
+      <input type="hidden" name="add_user" value="1">
 
-            <select name="role" required>
-                <option value="Admin">Admin</option>
-                <option value="Staff">Staff</option>
-                <option value="User">User</option>
-            </select><br><br>
+      <input type="text" name="username" placeholder="Username" required
+        class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#18d9b0] outline-none">
 
-            <button type="submit">Create</button>
-            <button type="button" onclick="closeModal()">Cancel</button>
-        </form>
-    </div>
+      <input type="password" name="password" placeholder="Password" required
+        class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#18d9b0] outline-none">
+
+      <button type="submit"
+        class="bg-[#0d755f] text-white rounded-lg hover:bg-[#1b7a74] transition font-semibold">
+        Add User
+      </button>
+
+    </form>
+  </div>
+
+  <!-- Search -->
+  <div class="mb-4">
+    <input type="text" id="userSearch"
+      placeholder="Search users..."
+      class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#18d9b0] outline-none">
+  </div>
+
+  <!-- Users Table -->
+  <div class="bg-white rounded-xl shadow overflow-y-auto max-h-[400px]">
+    <table id="usersTable" class="min-w-full text-center border border-gray-200">
+
+      <thead class="bg-[#f5fafc] text-[#093045] font-bold">
+        <tr>
+          <th class="py-3 px-4 border-b">User ID</th>
+          <th class="py-3 px-4 border-b">Username</th>
+          <th class="py-3 px-4 border-b">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for user in users %}
+        <tr class="hover:bg-gray-50">
+          <td class="py-3 px-4 border-b">{{ user[0] }}</td>
+          <td class="py-3 px-4 border-b">{{ user[1] }}</td>
+          <td class="py-3 px-4 border-b">
+            <button onclick="confirmUserDelete('{{ user[0] }}')"
+              class="bg-[#7d091c] text-white px-3 py-1 rounded hover:bg-[#5a060f] transition">
+              Delete
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+
 </div>
 
-<!-- ================= USERS TABLE ================= -->
-
-<table>
-<tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Role</th>
-    <th>Verified</th>
-    <th>Actions</th>
-</tr>
-
-{% for u in users %}
-<tr>
-    <td>{{ u[0] }}</td>
-    <td>{{ u[1] }}</td>
-    <td>{{ u[2] }}</td>
-    <td>{{ u[3] }}</td>
-
-    <!-- ROLE EDIT -->
-    <td>
-        <form method="POST" style="display:inline;">
-            <input type="hidden" name="action" value="update_role">
-            <input type="hidden" name="user_id" value="{{ u[0] }}">
-
-            <select name="role" onchange="this.form.submit()">
-                <option {% if u[4]=='Admin' %}selected{% endif %}>Admin</option>
-                <option {% if u[4]=='Staff' %}selected{% endif %}>Staff</option>
-                <option {% if u[4]=='User' %}selected{% endif %}>User</option>
-            </select>
-        </form>
-    </td>
-
-    <td>
-        {% if u[5] == 1 %} Yes {% else %} No {% endif %}
-    </td>
-
-    <td>
-        <!-- RESET PASSWORD -->
-        <form method="POST" style="display:inline;">
-            <input type="hidden" name="action" value="reset_password">
-            <input type="hidden" name="user_id" value="{{ u[0] }}">
-            <input type="password" name="new_password" placeholder="New Pass" required>
-            <button type="submit">Reset</button>
-        </form>
-
-        <!-- DELETE -->
-        <form method="POST" style="display:inline;">
-            <input type="hidden" name="action" value="delete">
-            <input type="hidden" name="user_id" value="{{ u[0] }}">
-            <button onclick="return confirm('Delete user?')">Delete</button>
-        </form>
-    </td>
-</tr>
-{% endfor %}
-</table>
-
-<script>
-function openModal(){
-    document.getElementById("userModal").style.display="block";
-}
-function closeModal(){
-    document.getElementById("userModal").style.display="none";
-}
-</script>
-
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

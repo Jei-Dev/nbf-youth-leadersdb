@@ -40,7 +40,7 @@ def login():
             session["user_id"] = user[0]
             session["role"] = user[3]
             conn.close()
-            return redirect("/enrollment")
+            return redirect("/dashboard")
 
         conn.close()
         return "Invalid credentials"

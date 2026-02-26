@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Initial Admin Setup</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initial Admin Setup</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-[#f5fafc] font-sans min-h-screen flex justify-center items-center p-4">
 
-<h2>System Setup - Create First Admin</h2>
+<div class="bg-white p-6 rounded-lg shadow w-full max-w-md">
+  <h2 class="text-2xl font-bold text-[#093045] mb-4">System Setup - Create First Admin</h2>
 
-<form method="POST">
+  <form method="POST" class="space-y-4">
+    <select name="person_id" required class="w-full border border-gray-300 rounded p-2">
+      <option value="">-- Select Enrolled Member --</option>
+      {% for p in persons %}
+      <option value="{{ p[0] }}">{{ p[1] }}</option>
+      {% endfor %}
+    </select>
+    <input type="text" name="username" placeholder="Username" required class="w-full border border-gray-300 rounded p-2">
+    <input type="email" name="email" placeholder="Email" required class="w-full border border-gray-300 rounded p-2">
+    <input type="password" name="password" placeholder="Password" required class="w-full border border-gray-300 rounded p-2">
 
-    <label>Select Enrolled Member:</label>
-    <select name="person_id" required>
-        {% for p in persons %}
-        <option value="{{ p[0] }}">{{ p[1] }}</option>
-        {% endfor %}
-    </select><br><br>
+    <button type="submit" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74] w-full">Create Admin</button>
+  </form>
+</div>
 
-    <input type="text" name="username" placeholder="Username" required><br><br>
-    <input type="email" name="email" placeholder="Email" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
-
-    <button type="submit">Create Admin</button>
-
-</form>
-
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

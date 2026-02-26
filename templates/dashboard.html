@@ -7,10 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-[#f5fafc] font-sans min-h-screen flex flex-col">
 
   <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+  <nav class="bg-[#1b7a74] text-white p-4 flex justify-between items-center">
     <h1 class="text-xl font-bold">Youth Leaders Dashboard</h1>
     <div>
       Logged in as: {{ session['role'] }}
@@ -18,75 +18,57 @@
     </div>
   </nav>
 
-  <div class="container mx-auto p-4">
+  <div class="container mx-auto p-4 flex-1">
 
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition text-center">
-        <h2 class="text-gray-500">Total Enrollments</h2>
+        <h2 class="text-[#093045] text-lg font-semibold">Total Enrollments</h2>
         <p class="text-3xl font-bold">{{ total_enrollments }}</p>
-    </div>
+      </div>
       <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition text-center">
-        <h2 class="text-gray-500">Total Graduates</h2>
+        <h2 class="text-[#093045] text-lg font-semibold">Total Graduates</h2>
         <p class="text-3xl font-bold">{{ total_graduates }}</p>
       </div>
       <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition text-center">
-        <h2 class="text-gray-500">Pending Graduations</h2>
+        <h2 class="text-[#093045] text-lg font-semibold">Pending Graduations</h2>
         <p class="text-3xl font-bold">{{ pending_graduates }}</p>
       </div>
     </div>
 
-  
     <!-- Graduates Table -->
-<div class="bg-white rounded-lg shadow mb-6 p-4 overflow-x-auto">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-gray-700 font-bold text-lg">Graduates List</h2>
-    <input 
-      type="text" 
-      id="searchInput" 
-      onkeyup="searchTable()" 
-      placeholder="Search graduates..." 
-      class="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-red-400"
-    >
-  </div>
-  <div class="overflow-y-auto max-h-96 bg-white rounded-lg shadow mb-6">
-    <table id="graduatesTable" class="min-w-full border border-gray-200">
-        <thead class="bg-gray-100">
-        <tr>
-            <th class="py-2 px-4 border-b text-center">Graduate ID</th>
-            <th class="py-2 px-4 border-b text-center">Name</th>
-            <th class="py-2 px-4 border-b text-center">Institution</th>
-            <th class="py-2 px-4 border-b text-center">Course</th>
-            <th class="py-2 px-4 border-b text-center">Graduation Date</th>
-            <th class="py-2 px-4 border-b text-center">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for grad in graduates %}
-        <tr class="hover:bg-gray-50">
-            <td class="py-2 px-4 border-b">{{ grad.unique_number }}</td>
-            <td class="py-2 px-4 border-b">{{ grad.person_name }}</td>
-            <td class="py-2 px-4 border-b">{{ grad.institution_name }}</td>
-            <td class="py-2 px-4 border-b">{{ grad.course_name }}</td>
-            <td class="py-2 px-4 border-b">{{ grad.graduation_date }}</td>
-            <td class="py-2 px-4 border-b">
-            <button 
-                onclick="printCertificate('{{ grad.unique_number }}')" 
-                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-            >
-                Print Certificate
-            </button>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
+        <h2 class="text-[#093045] font-bold text-lg">Graduates List</h2>
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search graduates..." 
+          class="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]"
+        >
+      </div>
+      <div class="overflow-y-auto max-h-96">
+        <table id="graduatesTable" class="min-w-full border border-gray-200">
+          <thead class="bg-[#f5fafc]">
+            <tr>
+              <th class="py-2 px-4 border-b text-center">Graduate ID</th>
+              <th class="py-2 px-4 border-b text-center">Name</th>
+              <th class="py-2 px-4 border-b text-center">Institution</th>
+              <th class="py-2 px-4 border-b text-center">Course</th>
+              <th class="py-2 px-4 border-b text-center">Graduation Date</th>
+              <th class="py-2 px-4 border-b text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
     </div>
-  </table>
-</div>
 
     <!-- Graduates Bar Chart -->
     <div class="bg-white p-4 rounded-lg shadow">
-      <h2 class="text-gray-700 font-bold mb-2">Graduates per Month</h2>
+      <h2 class="text-[#093045] font-bold mb-2">Graduates per Month</h2>
       <div class="relative h-64">
         <canvas id="graduatesChart"></canvas>
       </div>
@@ -94,8 +76,8 @@
 
   </div>
 
-  <!-- dashboard.html -->
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
