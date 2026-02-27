@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 </head>
 
-<body class="bg-[#f5fafc] font-sans">
+<body class="flex bg-[#f5fafc] font-sans">
+
+{% include "partials/sidebar.html" %}
 
 <div class="container mx-auto p-6">
 

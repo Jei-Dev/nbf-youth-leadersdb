@@ -43,27 +43,24 @@ function closeEdit() {
 
 function completeGraduate(enrollId) {
 
-    // Default to today's date
     const today = new Date().toISOString().slice(0, 10);
 
-    const gradDate = prompt(
-        "Enter graduation date (YYYY-MM-DD)",
-        today
-    );
+    const gradDate = prompt("Enter graduation date (YYYY-MM-DD)", today);
 
-    // If user cancels or leaves empty, stop
-    if (!gradDate) {
-        return;
-    }
+    if (!gradDate) return;
 
-    // Set hidden form values
-    document.getElementById("grad_enroll_id").value = enrollId;
-    document.getElementById("grad_date").value = gradDate;
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/add_graduate";
 
-    // Submit form to backend
-    document.getElementById("graduateForm").submit();
+    form.innerHTML = `
+        <input type="hidden" name="enrollment_id" value="${enrollId}">
+        <input type="hidden" name="graduation_date" value="${gradDate}">
+    `;
+
+    document.body.appendChild(form);
+    form.submit();
 }
-
 // ----------------------- LOGIN RESET MODAL -----------------------
 function openReset() {
     const modal = document.getElementById("resetModal");

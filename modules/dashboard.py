@@ -105,3 +105,127 @@ def api_graduates():
         })
 
     return jsonify(graduates)
+
+@dash_bp.route("/api/enrollments")
+def api_enrollments():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT e.enrollment_id,
+               p.first_name + ' ' + p.last_name,
+               i.inst_short_name,
+               c.course_short_name,
+               CASE 
+                   WHEN g.enrollment_id IS NOT NULL THEN 'Graduated'
+                   ELSE 'Active'
+               END AS status
+        FROM Enrollment e
+        INNER JOIN Person p ON e.person_id = p.person_id
+        INNER JOIN Institution i ON e.institution_id = i.institution_id
+        INNER JOIN Course c ON e.course_id = c.course_id
+        LEFT JOIN Graduate g ON e.enrollment_id = g.enrollment_id
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    data = []
+    for r in rows:
+        data.append({
+            "enrollment_id": r[0],
+            "name": r[1],
+            "institution_short": r[2],
+            "course_short": r[3],
+            "status": r[4]
+        })
+
+    return jsonify(data)
+
+@dash_bp.route("/api/users")
+def api_users():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT p.first_name + ' ' + p.last_name,
+               u.username,
+               u.role
+        FROM Users u
+        INNER JOIN Person p ON u.person_id = p.person_id
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    data = []
+    for r in rows:
+        data.append({
+            "name": r[0],
+            "username": r[1],
+            "role": r[2]
+        })
+
+    return jsonify(data)
+
+#==========Charts section===============
+@dash_bp.route("/api/chart/institution")
+def chart_institution():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT i.inst_short_name, COUNT(*)
+        FROM Graduate g
+        INNER JOIN Enrollment e ON g.enrollment_id = e.enrollment_id
+        INNER JOIN Institution i ON e.institution_id = i.institution_id
+        GROUP BY i.inst_short_name
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    return jsonify({
+        "labels": [r[0] for r in rows],
+        "values": [r[1] for r in rows]
+    })
+
+
+# graduates per course per year
+@dash_bp.route("/api/chart/course_year")
+def chart_course_year():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT c.course_short_name,
+               YEAR(g.graduation_date),
+               COUNT(*)
+        FROM Graduate g
+        INNER JOIN Enrollment e ON g.enrollment_id = e.enrollment_id
+        INNER JOIN Course c ON e.course_id = c.course_id
+        GROUP BY c.course_short_name, YEAR(g.graduation_date)
+        ORDER BY YEAR(g.graduation_date)
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    return jsonify(rows)
+
+@dash_bp.route("/api/chart/enrollments_per_institution")
+def chart_enrollments_per_institution():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT i.inst_short_name, COUNT(*)
+        FROM Enrollment e
+        INNER JOIN Institution i ON e.institution_id = i.institution_id
+        GROUP BY i.inst_short_name
+    """)
+    rows = cursor.fetchall()
+    conn.close()
+    return jsonify({
+        "labels": [r[0] for r in rows],
+        "values": [r[1] for r in rows]
+    })
