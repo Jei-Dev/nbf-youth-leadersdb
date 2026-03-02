@@ -11,10 +11,6 @@ function searchTable(inputId, tableId) {
     }
 }
 
-// Usage:
-// searchTable('searchInput', 'graduatesTable')
-// searchTable('searchInput', 'enrollmentTable')
-
 // ----------------------- ENROLLMENT ACTIONS -----------------------
 function confirmDelete(id) {
     if (confirm("Are you sure you want to delete this record?")) {
@@ -42,11 +38,8 @@ function closeEdit() {
 }
 
 function completeGraduate(enrollId) {
-
     const today = new Date().toISOString().slice(0, 10);
-
     const gradDate = prompt("Enter graduation date (YYYY-MM-DD)", today);
-
     if (!gradDate) return;
 
     const form = document.createElement("form");
@@ -61,6 +54,7 @@ function completeGraduate(enrollId) {
     document.body.appendChild(form);
     form.submit();
 }
+
 // ----------------------- LOGIN RESET MODAL -----------------------
 function openReset() {
     const modal = document.getElementById("resetModal");
@@ -106,17 +100,40 @@ function closeCourse() {
 
 // ----------------------- DASHBOARD SEARCH -----------------------
 document.addEventListener("DOMContentLoaded", () => {
-    const searchGraduates = document.getElementById("searchInput");
-    if (searchGraduates) {
-        searchGraduates.addEventListener("keyup", () => {
-            searchTable("searchInput", "graduatesTable");
+    const searchInputs = document.querySelectorAll("#searchInput");
+    searchInputs.forEach(input => {
+        input.addEventListener("keyup", () => {
+            const tableId = input.dataset.table;
+            searchTable(input.id, tableId);
         });
-    }
-
-    const searchEnrollments = document.getElementById("searchInput");
-    if (searchEnrollments) {
-        searchEnrollments.addEventListener("keyup", () => {
-            searchTable("searchInput", "enrollmentTable");
-        });
-    }
+    });
 });
+
+// ----------------------- SIDEBAR TOGGLE -----------------------
+function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (window.innerWidth < 768) {
+        sidebar.classList.toggle("-translate-x-full");
+        overlay.classList.toggle("hidden");
+    } else {
+        sidebar.classList.toggle("w-30");
+        sidebar.classList.toggle("w-10");
+    }
+}
+
+function confirmUserDelete(userId) {
+    if (confirm("Are you sure you want to delete this user?")) {
+        fetch(`/delete_user/${userId}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("Failed to delete user.");
+            }
+        });
+    }
+}

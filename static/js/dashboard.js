@@ -133,105 +133,79 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   };
 
-// -------------------- CHARTS --------------------
-let institutionChartInstance = null;
-let courseYearChartInstance = null;
+  // -------------------- CHARTS --------------------
+  let institutionChartInstance = null;
+  let courseYearChartInstance = null;
 
-function loadInstitutionChart() {
-  // Fetch combined data for enrollments vs graduates per institution
-  Promise.all([
-    fetch("/api/chart/institution").then(res => res.json()), // graduates
-    fetch("/api/chart/enrollments_per_institution").then(res => res.json()) // enrollments
-  ])
-  .then(([graduatesData, enrollmentsData]) => {
-    const ctx = document.getElementById("institutionChart").getContext("2d");
-    if (institutionChartInstance) institutionChartInstance.destroy();
+  function loadInstitutionChart() {
+    Promise.all([
+      fetch("/api/chart/institution").then(res => res.json()),
+      fetch("/api/chart/enrollments_per_institution").then(res => res.json())
+    ])
+    .then(([graduatesData, enrollmentsData]) => {
+      const ctx = document.getElementById("institutionChart").getContext("2d");
+      if (institutionChartInstance) institutionChartInstance.destroy();
 
-    // Align labels (institution names)
-    const labels = Array.from(new Set([...graduatesData.labels, ...enrollmentsData.labels]));
+      const labels = Array.from(new Set([...graduatesData.labels, ...enrollmentsData.labels]));
+      const graduateValues = labels.map(label => graduatesData.labels.includes(label)
+        ? graduatesData.values[graduatesData.labels.indexOf(label)] : 0);
+      const enrollmentValues = labels.map(label => enrollmentsData.labels.includes(label)
+        ? enrollmentsData.values[enrollmentsData.labels.indexOf(label)] : 0);
 
-    // Map values to the same label order
-    const graduateValues = labels.map(label => graduatesData.labels.includes(label)
-      ? graduatesData.values[graduatesData.labels.indexOf(label)] : 0);
-    const enrollmentValues = labels.map(label => enrollmentsData.labels.includes(label)
-      ? enrollmentsData.values[enrollmentsData.labels.indexOf(label)] : 0);
-
-    institutionChartInstance = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Enrollments",
-            data: enrollmentValues,
-            backgroundColor: "#2054a8"
-          },
-          {
-            label: "Graduates",
-            data: graduateValues,
-            backgroundColor: "#1b7a74"
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: "top" },
-          tooltip: { mode: "index", intersect: false }
+      institutionChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            { label: "Enrollments", data: enrollmentValues, backgroundColor: "#2054a8" },
+            { label: "Graduates", data: graduateValues, backgroundColor: "#1b7a74" }
+          ]
         },
-        scales: {
-          x: { stacked: false },
-          y: { beginAtZero: true }
-        }
-      }
-    });
-  })
-  .catch(error => console.error("Institution Comparison Chart Error:", error));
-}
-
-function loadCourseYearChart() {
-  fetch("/api/chart/course_year")
-    .then(res => res.json())
-    .then(data => {
-      const ctx = document.getElementById("courseYearChart").getContext("2d");
-      if (courseYearChartInstance) courseYearChartInstance.destroy();
-
-      let courses = {};
-      let yearsSet = new Set();
-
-      data.forEach(row => {
-        const course = row[0];
-        const year = parseInt(row[1]);   // <-- convert year to number
-        const count = parseInt(row[2]);  // <-- ensure count is number
-        yearsSet.add(year);
-
-        if (!courses[course]) courses[course] = {};
-        courses[course][year] = count;
-      });
-
-      const years = Array.from(yearsSet).sort((a, b) => a - b); // numerical sort
-      const datasets = Object.keys(courses).map(course => ({
-        label: course,
-        data: years.map(y => courses[course][y] || 0),
-        fill: false,
-        tension: 0.3
-      }));
-
-      courseYearChartInstance = new Chart(ctx, {
-        type: "line",
-        data: { labels: years, datasets },
-        options: {
-          responsive: true,
-          plugins: { legend: { position: "top" } },
-          scales: { y: { beginAtZero: true } }
-        }
+        options: { responsive: true, plugins: { legend: { position: "top" }, tooltip: { mode: "index", intersect: false } }, scales: { x: { stacked: false }, y: { beginAtZero: true } } }
       });
     })
-    .catch(error => console.error("Course-Year Chart Error:", error));
-}
+    .catch(error => console.error("Institution Comparison Chart Error:", error));
+  }
 
-// Load charts on page load
-loadInstitutionChart();
-loadCourseYearChart();
+  function loadCourseYearChart() {
+    fetch("/api/chart/course_year")
+      .then(res => res.json())
+      .then(data => {
+        const ctx = document.getElementById("courseYearChart").getContext("2d");
+        if (courseYearChartInstance) courseYearChartInstance.destroy();
+
+        let courses = {};
+        let yearsSet = new Set();
+
+        // Convert pyodbc rows to dicts if needed
+        data.forEach(row => {
+          const course = row.course || row[0];
+          const year = parseInt(row.year || row[1]);
+          const count = parseInt(row.count || row[2]);
+          yearsSet.add(year);
+
+          if (!courses[course]) courses[course] = {};
+          courses[course][year] = count;
+        });
+
+        const years = Array.from(yearsSet).sort((a, b) => a - b);
+        const datasets = Object.keys(courses).map(course => ({
+          label: course,
+          data: years.map(y => courses[course][y] || 0),
+          fill: false,
+          tension: 0.3
+        }));
+
+        courseYearChartInstance = new Chart(ctx, {
+          type: "line",
+          data: { labels: years, datasets },
+          options: { responsive: true, plugins: { legend: { position: "top" } }, scales: { y: { beginAtZero: true } } }
+        });
+      })
+      .catch(error => console.error("Course-Year Chart Error:", error));
+  }
+
+  loadInstitutionChart();
+  loadCourseYearChart();
 
 });

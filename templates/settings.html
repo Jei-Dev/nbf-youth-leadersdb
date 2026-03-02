@@ -1,53 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Settings</title>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Settings - Youth Leaders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 </head>
-<body class="bg-[#f5fafc] font-sans min-h-screen p-4">
+<body class="bg-[#f5fafc] font-sans min-h-screen flex">
 
+  <!-- ================= SIDEBAR ================= -->
+  {% include "partials/sidebar.html" %}
 
+  <!-- ================= MAIN CONTENT ================= -->
+  <div class="flex-1 p-6">
+    <h2 class="text-2xl font-bold text-[#093045] mb-2">System Settings</h2>
+    
+    <a href="/manage_users" class="text-gray-500 mb-6 inline-block">
+      <p>You can add, update, or delete user accounts here.</p>
+    </a>
 
-<h2 class="text-2xl font-bold text-[#093045] mb-4">System Settings</h2>
+    <div class="flex gap-4 mb-6">
+      <button onclick="openInst()" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">
+        Add Institution
+      </button>
+      <button onclick="openCourse()" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">
+        Add Course
+      </button>
+    </div>
 
-<div class="flex gap-4 mb-4">
-  <button onclick="openInst()" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">Add Institution</button>
-  <button onclick="openCourse()" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">Add Course</button>
-</div>
-
-<!-- Institution Modal -->
-<div id="instModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
-  <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-2">
-    <h3 class="text-[#093045] font-bold text-lg">Add Institution</h3>
-    <form method="POST" class="space-y-2">
-      <input type="text" name="institution_name" placeholder="Institution Name" required class="w-full border border-gray-300 rounded p-2">
-      <input type="text" name="inst_short_name" placeholder="Short Name" required class="w-full border border-gray-300 rounded p-2">
-      <div class="flex justify-end gap-2">
-        <button type="submit" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">Save</button>
-        <button type="button" onclick="closeInst()" class="border border-[#f5fafc] px-4 py-2 rounded">Cancel</button>
+    <!-- Institution Modal -->
+    <div id="instModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+      <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-4">
+        <h3 class="text-[#093045] font-bold text-lg">Add Institution</h3>
+        <form method="POST" class="space-y-2">
+          <input type="text" name="institution_name" placeholder="Institution Name" required class="w-full border border-gray-300 rounded p-2">
+          <input type="text" name="inst_short_name" placeholder="Short Name" required class="w-full border border-gray-300 rounded p-2">
+          <div class="flex justify-end gap-2">
+            <button type="submit" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">Save</button>
+            <button type="button" onclick="closeInst()" class="border px-4 py-2 rounded">Cancel</button>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
-</div>
+    </div>
 
-<!-- Course Modal -->
-<div id="courseModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
-  <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-2">
-    <h3 class="text-[#093045] font-bold text-lg">Add Course</h3>
-    <form method="POST" class="space-y-2">
-      <input type="text" name="course_name" placeholder="Course Name" required class="w-full border border-gray-300 rounded p-2">
-      <input type="text" name="course_short_name" placeholder="Short Name" required class="w-full border border-gray-300 rounded p-2">
-      <input type="text" name="duration" placeholder="Duration" class="w-full border border-gray-300 rounded p-2">
-      <div class="flex justify-end gap-2">
-        <button type="submit" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">Save</button>
-        <button type="button" onclick="closeCourse()" class="border border-[#f5fafc] px-4 py-2 rounded">Cancel</button>
+    <!-- Course Modal -->
+    <div id="courseModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+      <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-4">
+        <h3 class="text-[#093045] font-bold text-lg">Add Course</h3>
+        <form method="POST" class="space-y-2">
+          <input type="text" name="course_name" placeholder="Course Name" required class="w-full border border-gray-300 rounded p-2">
+          <input type="text" name="course_short_name" placeholder="Short Name" required class="w-full border border-gray-300 rounded p-2">
+          <input type="text" name="duration" placeholder="Duration" class="w-full border border-gray-300 rounded p-2">
+          <div class="flex justify-end gap-2">
+            <button type="submit" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">Save</button>
+            <button type="button" onclick="closeCourse()" class="border px-4 py-2 rounded">Cancel</button>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
-</div>
+    </div>
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

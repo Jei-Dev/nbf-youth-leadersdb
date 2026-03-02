@@ -3,99 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manage Users - Youth Leaders</title>
+<title>Registration - Youth Leaders</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex bg-[#f5fafc] font-sans min-h-screen p-4">
 
+<body class="flex bg-[#f5fafc] font-sans min-h-screen">
+
+<!-- ================= SIDEBAR ================= -->
 {% include "partials/sidebar.html" %}
 
-<h2 class="text-2xl font-bold text-[#093045] mb-4">User Management (Admin Only)</h2>
+<!-- ================= MAIN CONTENT ================= -->
+<div class="flex-1 p-6 transition-all duration-300">
 
-<button onclick="openModal()" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74] mb-4">+ Create User</button>
+  <!-- HEADER -->
+  <div class="mb-6">
+    <h2 class="text-2xl font-bold text-[#093045]">
+      Registration
+    </h2>
+    <p class="text-gray-500 text-sm mt-1">
+      <a href="/manage_users" class="hover:underline">
+        Manage user accounts
+      </a>
+    </p>
+  </div>
 
-<!-- Create User Modal -->
-<div id="userModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
-  <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-4">
-    <h3 class="text-[#093045] font-bold text-lg">Create User</h3>
-    <form method="POST" class="space-y-2">
-      <input type="hidden" name="action" value="create">
-      <select name="person_id" required class="w-full border border-gray-300 rounded p-2">
-        <option value="">-- Select Enrolled Member --</option>
-        {% for p in persons %}
-        <option value="{{ p[0] }}">{{ p[1] }}</option>
-        {% endfor %}
-      </select>
-      <input type="text" name="username" placeholder="Username" required class="w-full border border-gray-300 rounded p-2">
-      <input type="email" name="email" placeholder="Email" required class="w-full border border-gray-300 rounded p-2">
-      <input type="password" name="password" placeholder="Password" required class="w-full border border-gray-300 rounded p-2">
-      <select name="role" required class="w-full border border-gray-300 rounded p-2">
-        <option value="Admin">Admin</option>
-        <option value="Staff">Staff</option>
-        <option value="User">User</option>
-      </select>
-      <div class="flex justify-end gap-2">
-        <button type="submit" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">Create</button>
-        <button type="button" onclick="closeModal()" class="border border-[#f5fafc] px-4 py-2 rounded">Cancel</button>
+  <!-- ================= ENROLLMENT FORM ================= -->
+  <div class="bg-white rounded-lg shadow p-6 mb-8">
+
+    <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      <!-- Personal Info -->
+      <div class="md:col-span-2">
+        <h4 class="text-md font-bold text-[#093045] border-b pb-2">
+          Personal Information
+        </h4>
       </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">First Name</label>
+        <input type="text" name="first_name" required
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Middle Name</label>
+        <input type="text" name="middle_name"
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Last Name</label>
+        <input type="text" name="last_name" required
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Date of Birth</label>
+        <input type="date" name="dob" required
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Gender</label>
+        <select name="gender" required
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          <option value="">-- Select Gender --</option>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Phone Number</label>
+        <input type="text" name="phone"
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+      </div>
+
+      <div class="flex flex-col md:col-span-2">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Email Address</label>
+        <input type="email" name="email"
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+      </div>
+
+      <!-- Enrollment Info -->
+      <div class="md:col-span-2 mt-6">
+        <h4 class="text-md font-bold text-[#093045] border-b pb-2">
+          Enrollment Information
+        </h4>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Institution</label>
+        <select name="institution_id" required
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          <option value="">-- Select Institution --</option>
+          {% for inst in institutions %}
+          <option value="{{ inst[0] }}">{{ inst[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Course</label>
+        <select name="course_id" required
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          <option value="">-- Select Course --</option>
+          {% for course in courses %}
+          <option value="{{ course[0] }}">{{ course[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="flex flex-col md:col-span-2">
+        <label class="text-sm font-semibold text-[#093045] mb-1">Enrollment Date</label>
+        <input type="date" name="enrollment_date" required
+          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+      </div>
+
+      <div class="md:col-span-2 mt-4">
+        <button type="submit"
+          class="bg-[#0d755f] text-white px-6 py-2 rounded hover:bg-[#1b7a74] transition">
+          Save Enrollment
+        </button>
+      </div>
+
     </form>
   </div>
-</div>
 
-<!-- Users Table -->
-<div class="overflow-x-auto bg-white rounded-lg shadow">
-<table class="min-w-full border border-gray-200">
-  <thead class="bg-[#f5fafc] text-[#093045]">
-    <tr>
-      <th class="py-2 px-4 border-b">ID</th>
-      <th class="py-2 px-4 border-b">Name</th>
-      <th class="py-2 px-4 border-b">Username</th>
-      <th class="py-2 px-4 border-b">Email</th>
-      <th class="py-2 px-4 border-b">Role</th>
-      <th class="py-2 px-4 border-b">Verified</th>
-      <th class="py-2 px-4 border-b">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for u in users %}
-    <tr class="text-center hover:bg-gray-50">
-      <td class="py-2 px-4 border-b">{{ u[0] }}</td>
-      <td class="py-2 px-4 border-b">{{ u[1] }}</td>
-      <td class="py-2 px-4 border-b">{{ u[2] }}</td>
-      <td class="py-2 px-4 border-b">{{ u[3] }}</td>
-      <td class="py-2 px-4 border-b">
-        <form method="POST">
-          <input type="hidden" name="action" value="update_role">
-          <input type="hidden" name="user_id" value="{{ u[0] }}">
-          <select name="role" onchange="this.form.submit()" class="border border-gray-300 rounded p-1">
-            <option {% if u[4]=='Admin' %}selected{% endif %}>Admin</option>
-            <option {% if u[4]=='Staff' %}selected{% endif %}>Staff</option>
-            <option {% if u[4]=='User' %}selected{% endif %}>User</option>
+  <!-- ================= CREATE USER MODAL ================= -->
+  <div id="userModal"
+       class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+
+    <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-4 animate-fadeIn">
+
+      <h3 class="text-[#093045] font-bold text-lg">
+        Add User Account
+      </h3>
+
+      <form method="POST" action="/manage_users" class="space-y-3">
+        <input type="hidden" name="action" value="create">
+
+        <div class="flex flex-col">
+          <label class="text-sm font-semibold text-[#093045] mb-1">Enrolled Member</label>
+          <select name="person_id" required
+            class="border border-gray-300 rounded p-2">
+            <option value="">-- Select Enrolled Member --</option>
+            {% for p in persons %}
+            <option value="{{ p[0] }}">{{ p[1] }}</option>
+            {% endfor %}
           </select>
-        </form>
-      </td>
-      <td class="py-2 px-4 border-b">{% if u[5]==1 %}Yes{% else %}No{% endif %}</td>
-      <td class="py-2 px-4 border-b space-x-1">
-        <!-- Reset -->
-        <form method="POST" class="inline">
-          <input type="hidden" name="action" value="reset_password">
-          <input type="hidden" name="user_id" value="{{ u[0] }}">
-          <input type="password" name="new_password" placeholder="New Pass" required class="border border-gray-300 rounded p-1">
-          <button type="submit" class="bg-[#0d755f] text-white px-2 py-1 rounded hover:bg-[#1b7a74]">Reset</button>
-        </form>
-        <!-- Delete -->
-        <form method="POST" class="inline">
-          <input type="hidden" name="action" value="delete">
-          <input type="hidden" name="user_id" value="{{ u[0] }}">
-          <button onclick="return confirm('Delete user?')" class="bg-[#7d091c] text-white px-2 py-1 rounded hover:bg-[#1b7a74]">Delete</button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-semibold text-[#093045] mb-1">Username</label>
+          <input type="text" name="username" required
+            class="border border-gray-300 rounded p-2">
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-semibold text-[#093045] mb-1">Email</label>
+          <input type="email" name="email" required
+            class="border border-gray-300 rounded p-2">
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-semibold text-[#093045] mb-1">Password</label>
+          <input type="password" name="password" required
+            class="border border-gray-300 rounded p-2">
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-semibold text-[#093045] mb-1">Role</label>
+          <select name="role" required
+            class="border border-gray-300 rounded p-2">
+            <option value="Admin">Admin</option>
+            <option value="Staff">Staff</option>
+            <option value="User">User</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="submit"
+            class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">
+            Create
+          </button>
+
+          <button type="button"
+            onclick="closeUserModal()"
+            class="border px-4 py-2 rounded">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
 </div>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
 </body>
 </html>

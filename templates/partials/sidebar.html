@@ -1,26 +1,40 @@
-<div class="w-64 bg-[#093045] text-white min-h-screen p-6 space-y-6">
+<!-- ================= SIDEBAR ================= -->
+<div id="sidebar"
+     class="group bg-[#093045] text-white min-h-screen w-16 hover:w-64
+            p-6 space-y-6 transition-all duration-300 ease-in-out">
 
-  <h2 class="text-xl font-bold mb-6">Youth Leaders</h2>
+  <!-- Logo / Title -->
+  <h2 class="text-xl font-bold mb-6 hidden group-hover:block">
+    Youth Leaders
+  </h2>
 
+  <!-- Dashboard -->
   <a href="/dashboard"
-     class="block px-4 py-2 rounded hover:bg-[#0d755f] transition">
-    📊 Dashboard
+     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
+    <span class="text-lg">📊</span>
+    <span class="hidden group-hover:inline">Dashboard</span>
   </a>
 
+  <!-- Enrollment -->
   <a href="/enrollment"
-     class="block px-4 py-2 rounded hover:bg-[#0d755f] transition">
-    📝 Enrollment
+     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
+    <span class="text-lg">📝</span>
+    <span class="hidden group-hover:inline">Enrollment</span>
   </a>
 
+  <!-- View Graduates -->
   <a href="/dashboard#graduates"
      onclick="showSection('graduates')"
-     class="block px-4 py-2 rounded hover:bg-[#0d755f] transition">
-    🎓 View Graduates
+     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
+    <span class="text-lg">🎓</span>
+    <span class="hidden group-hover:inline">Graduates</span>
   </a>
 
+  <!-- Registration -->
   <a href="/registration"
-     class="block px-4 py-2 rounded hover:bg-[#0d755f] transition">
-    ➕ Registration
+     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
+    <span class="text-lg">➕</span>
+    <span class="hidden group-hover:inline">Register</span>
   </a>
 
 </div>

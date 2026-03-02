@@ -9,3 +9,4 @@ user_bp = Blueprint("user", __name__)
 
 # Secret serializer
 serializer = URLSafeTimedSerializer("SECRET_KEY")
+

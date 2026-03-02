@@ -20,3 +20,5 @@ def init_mail(app):
     app.config['MAIL_USERNAME'] = 'your_email@gmail.com'
     app.config['MAIL_PASSWORD'] = 'your_app_password'
     mail.init_app(app)
+
+

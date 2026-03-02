@@ -26,3 +26,5 @@ app.register_blueprint(dash_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+

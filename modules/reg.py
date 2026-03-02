@@ -115,7 +115,6 @@ def verify_email(token):
 # ---------------- USER MANAGEMENT (ADMIN ONLY) ----------------
 @reg_bp.route("/manage_users", methods=["GET", "POST"])
 def manage_users():
-
     # 🔐 Admin Protection
     if "role" not in session or session["role"] != "Admin":
         return redirect("/login")
@@ -123,14 +122,10 @@ def manage_users():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # ==========================
-    # HANDLE AJAX ACTIONS
-    # ==========================
     if request.method == "POST":
-
         action = request.form.get("action")
 
-        # -------- CREATE USER --------
+        # CREATE USER
         if action == "create":
             person_id = request.form["person_id"]
             username = request.form["username"]
@@ -143,50 +138,9 @@ def manage_users():
                 (person_id, username, password_hash, email, role)
                 VALUES (?, ?, ?, ?, ?)
             """, (person_id, username, password, email, role))
-
             conn.commit()
 
-        # -------- DELETE USER --------
-        elif action == "delete":
-            user_id = request.form["user_id"]
-
-            cursor.execute("DELETE FROM Users WHERE user_id=?", (user_id,))
-            conn.commit()
-
-        # -------- UPDATE ROLE --------
-        elif action == "update_role":
-            user_id = request.form["user_id"]
-            new_role = request.form["role"]
-
-            cursor.execute("""
-                UPDATE Users
-                SET role=?
-                WHERE user_id=?
-            """, (new_role, user_id))
-
-            conn.commit()
-
-        # -------- RESET PASSWORD --------
-        elif action == "reset_password":
-            user_id = request.form["user_id"]
-            new_password = generate_password_hash(request.form["new_password"])
-
-            cursor.execute("""
-                UPDATE Users
-                SET password_hash=?
-                WHERE user_id=?
-            """, (new_password, user_id))
-
-            conn.commit()
-
-        conn.close()
-        return redirect("/manage_users")
-
-    # ==========================
     # LOAD DATA
-    # ==========================
-
-    # Only enrolled members without user account
     cursor.execute("""
         SELECT DISTINCT p.person_id,
                p.first_name + ' ' + p.last_name
@@ -195,6 +149,41 @@ def manage_users():
         WHERE p.person_id NOT IN (SELECT person_id FROM Users)
     """)
     persons = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT u.user_id,
+               p.first_name + ' ' + p.last_name AS person_name,
+               u.username,
+               u.email,
+               u.role,
+               u.is_verified
+        FROM Users u
+        INNER JOIN Person p ON u.person_id = p.person_id
+        ORDER BY u.user_id DESC
+    """)
+    users = cursor.fetchall()
+
+    conn.close()
+
+    return render_template("manage_users.html",
+                           persons=persons,
+                           users=users)
+
+
+# ---------------- DELETE USER ----------------
+@reg_bp.route('/delete_user/<int:user_id>', methods=['POST'])
+def delete_user(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM Users WHERE user_id = ?", (user_id,))
+        conn.commit()
+        return '', 200
+    except Exception as e:
+        print(e)
+        return '', 500
+    finally:
+        conn.close()
 
     # Existing users
     cursor.execute("""
@@ -215,3 +204,4 @@ def manage_users():
     return render_template("manage_users.html",
                            persons=persons,
                            users=users)
+
