@@ -1,15 +1,12 @@
 // ----------------------- SEARCH FUNCTION -----------------------
-function searchTable(inputId, tableId) {
-    const input = document.getElementById(inputId);
-    const filter = input.value.toLowerCase();
-    const table = document.getElementById(tableId);
-    const rows = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < rows.length; i++) {
-        const txt = rows[i].textContent.toLowerCase();
-        rows[i].style.display = txt.includes(filter) ? "" : "none";
-    }
-}
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#enrollmentTable tbody tr");
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
 
 // ----------------------- ENROLLMENT ACTIONS -----------------------
 function confirmDelete(id) {
@@ -24,12 +21,15 @@ function confirmDelete(id) {
     }
 }
 
-function openEdit(id, date) {
+// ----------------------- EDIT MODAL -----------------------
+function openEdit(enrollId, enrollDate, personId, institutionId, courseId) {
     const editBox = document.getElementById("editBox");
-    if (!editBox) return;
-    document.getElementById("edit_id").value = id;
-    document.getElementById("edit_date").value = date;
-    editBox.style.display = "block";
+    document.getElementById("edit_id").value = enrollId;
+    document.getElementById("edit_date").value = enrollDate;
+    document.getElementById("edit_person").value = personId;
+    document.getElementById("edit_institution").value = institutionId;
+    document.getElementById("edit_course").value = courseId;
+    editBox.style.display = "flex";
 }
 
 function closeEdit() {
@@ -37,6 +37,7 @@ function closeEdit() {
     if (editBox) editBox.style.display = "none";
 }
 
+// ----------------------- GRADUATE -----------------------
 function completeGraduate(enrollId) {
     const today = new Date().toISOString().slice(0, 10);
     const gradDate = prompt("Enter graduation date (YYYY-MM-DD)", today);
@@ -55,60 +56,6 @@ function completeGraduate(enrollId) {
     form.submit();
 }
 
-// ----------------------- LOGIN RESET MODAL -----------------------
-function openReset() {
-    const modal = document.getElementById("resetModal");
-    if (modal) modal.classList.remove("hidden");
-}
-
-function closeReset() {
-    const modal = document.getElementById("resetModal");
-    if (modal) modal.classList.add("hidden");
-}
-
-// ----------------------- MANAGE USERS MODAL -----------------------
-function openUserModal() {
-    const modal = document.getElementById("userModal");
-    if (modal) modal.style.display = "block";
-}
-
-function closeUserModal() {
-    const modal = document.getElementById("userModal");
-    if (modal) modal.style.display = "none";
-}
-
-// ----------------------- SETTINGS MODALS -----------------------
-function openInst() {
-    const modal = document.getElementById("instModal");
-    if (modal) modal.style.display = "block";
-}
-
-function closeInst() {
-    const modal = document.getElementById("instModal");
-    if (modal) modal.style.display = "none";
-}
-
-function openCourse() {
-    const modal = document.getElementById("courseModal");
-    if (modal) modal.style.display = "block";
-}
-
-function closeCourse() {
-    const modal = document.getElementById("courseModal");
-    if (modal) modal.style.display = "none";
-}
-
-// ----------------------- DASHBOARD SEARCH -----------------------
-document.addEventListener("DOMContentLoaded", () => {
-    const searchInputs = document.querySelectorAll("#searchInput");
-    searchInputs.forEach(input => {
-        input.addEventListener("keyup", () => {
-            const tableId = input.dataset.table;
-            searchTable(input.id, tableId);
-        });
-    });
-});
-
 // ----------------------- SIDEBAR TOGGLE -----------------------
 function toggleSidebar() {
     const sidebar = document.getElementById("sidebar");
@@ -123,17 +70,10 @@ function toggleSidebar() {
     }
 }
 
+// ----------------------- USER DELETE -----------------------
 function confirmUserDelete(userId) {
     if (confirm("Are you sure you want to delete this user?")) {
-        fetch(`/delete_user/${userId}`, {
-            method: 'POST',
-        })
-        .then(response => {
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert("Failed to delete user.");
-            }
-        });
+        fetch(`/delete_user/${userId}`, { method: 'POST' })
+        .then(response => response.ok ? location.reload() : alert("Failed to delete user."));
     }
 }

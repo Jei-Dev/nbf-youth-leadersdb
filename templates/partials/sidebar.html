@@ -1,40 +1,69 @@
 <!-- ================= SIDEBAR ================= -->
 <div id="sidebar"
-     class="group bg-[#093045] text-white min-h-screen w-16 hover:w-64
-            p-6 space-y-6 transition-all duration-300 ease-in-out">
+     class="group bg-[#093045] text-white min-h-screen w-16 hover:w-48
+            p-3 flex flex-col justify-between transition-all duration-300 ease-in-out">
 
-  <!-- Logo / Title -->
-  <h2 class="text-xl font-bold mb-6 hidden group-hover:block">
-    Youth Leaders
-  </h2>
+  <div class="flex flex-col mt-8 space-y-2">
 
-  <!-- Dashboard -->
-  <a href="/dashboard"
-     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
-    <span class="text-lg">📊</span>
-    <span class="hidden group-hover:inline">Dashboard</span>
-  </a>
+    <!-- Logo / Title -->
+    <h2 class="text-xl font-bold mb-6 hidden group-hover:block text-left pl-1">
+      Youth Leaders
+    </h2>
 
-  <!-- Enrollment -->
-  <a href="/enrollment"
-     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
-    <span class="text-lg">📝</span>
-    <span class="hidden group-hover:inline">Enrollment</span>
-  </a>
+    <!-- Dashboard -->
+    <a href="/dashboard"
+       class="flex items-center gap-2 px-2 py-2 rounded hover:bg-[#0d755f] transition justify-start w-full text-sm">
+      <span class="text-lg">📊</span>
+      <span class="hidden group-hover:inline">Dashboard</span>
+    </a>
 
-  <!-- View Graduates -->
-  <a href="/dashboard#graduates"
-     onclick="showSection('graduates')"
-     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
-    <span class="text-lg">🎓</span>
-    <span class="hidden group-hover:inline">Graduates</span>
-  </a>
+    <!-- Enrollment -->
+    <a href="/enrollment"
+       class="flex items-center gap-2 px-2 py-2 rounded hover:bg-[#0d755f] transition justify-start w-full text-sm">
+      <span class="text-lg">📝</span>
+      <span class="hidden group-hover:inline">Enrollment</span>
+    </a>
 
-  <!-- Registration -->
-  <a href="/registration"
-     class="flex items-center gap-3 px-2 py-2 rounded hover:bg-[#0d755f] transition">
-    <span class="text-lg">➕</span>
-    <span class="hidden group-hover:inline">Register</span>
-  </a>
+    <!-- View Graduates -->
+    <a href="/dashboard#graduates"
+       onclick="showSection('graduates')"
+       class="flex items-center gap-2 px-2 py-2 rounded hover:bg-[#0d755f] transition justify-start w-full text-sm">
+      <span class="text-lg">🎓</span>
+      <span class="hidden group-hover:inline">Graduates</span>
+    </a>
+
+    <!-- Registration -->
+    <a href="/registration"
+       class="flex items-center gap-2 px-2 py-2 rounded hover:bg-[#0d755f] transition justify-start w-full text-sm">
+      <span class="text-lg">➕</span>
+      <span class="hidden group-hover:inline">Register</span>
+    </a>
+  </div>
+
+  <!-- Footer -->
+<div class="mt-4 flex flex-col space-y-1 text-xs text-gray-300 pl-1">
+
+  <!-- Full view -->
+  <div class="hidden group-hover:flex flex-col items-center text-center space-y-1">
+    <span>
+      &copy; <span id="currentYear"></span> North Buganda Field
+    </span>
+    <span class="underline">
+      Developed by Jeitech
+    </span>
+  </div>
+
+  <!-- Compact view -->
+  <span class="block group-hover:hidden text-left">
+    &copy; <span id="currentYearCompact"></span>
+  </span>
+  
+</div>
 
 </div>
+
+<script>
+  const year = new Date().getFullYear();
+  document.getElementById('currentYear').textContent = year;
+  document.getElementById('currentYearCompact').textContent = year;
+</script>

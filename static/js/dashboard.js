@@ -167,45 +167,52 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(error => console.error("Institution Comparison Chart Error:", error));
   }
 
-  function loadCourseYearChart() {
-    fetch("/api/chart/course_year")
-      .then(res => res.json())
-      .then(data => {
-        const ctx = document.getElementById("courseYearChart").getContext("2d");
-        if (courseYearChartInstance) courseYearChartInstance.destroy();
+  function loadGraduatesPerInstitutionCourse() {
+  fetch("/api/chart/course_year")
+    .then(res => res.json())
+    .then(data => {
 
-        let courses = {};
-        let yearsSet = new Set();
+      const institutions = [...new Set(data.map(d => d.institution))];
+      const courses = [...new Set(data.map(d => d.course))];
 
-        // Convert pyodbc rows to dicts if needed
-        data.forEach(row => {
-          const course = row.course || row[0];
-          const year = parseInt(row.year || row[1]);
-          const count = parseInt(row.count || row[2]);
-          yearsSet.add(year);
-
-          if (!courses[course]) courses[course] = {};
-          courses[course][year] = count;
-        });
-
-        const years = Array.from(yearsSet).sort((a, b) => a - b);
-        const datasets = Object.keys(courses).map(course => ({
+      const datasets = courses.map(course => {
+        return {
           label: course,
-          data: years.map(y => courses[course][y] || 0),
-          fill: false,
-          tension: 0.3
-        }));
+          data: institutions.map(inst => {
+            const found = data.find(d => d.institution === inst && d.course === course);
+            return found ? found.count : 0;
+          })
+        };
+      });
 
-        courseYearChartInstance = new Chart(ctx, {
-          type: "line",
-          data: { labels: years, datasets },
-          options: { responsive: true, plugins: { legend: { position: "top" } }, scales: { y: { beginAtZero: true } } }
-        });
-      })
-      .catch(error => console.error("Course-Year Chart Error:", error));
-  }
+      const ctx = document.getElementById("courseYearChart").getContext("2d");
+
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: institutions,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              //text: "Graduates per Course from Each Institution"
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+    });
+}
 
   loadInstitutionChart();
-  loadCourseYearChart();
+  loadGraduatesPerInstitutionCourse();
 
 });

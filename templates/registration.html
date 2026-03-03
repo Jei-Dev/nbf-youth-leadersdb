@@ -13,14 +13,14 @@
 {% include "partials/sidebar.html" %}
 
 <!-- ================= MAIN CONTENT ================= -->
-<div class="flex-1 p-6 transition-all duration-300">
+<div class="flex-1 p-4 transition-all duration-300 flex flex-col">
 
   <!-- HEADER -->
-  <div class="mb-6">
-    <h2 class="text-2xl font-bold text-[#093045]">
+  <div class="mb-4 flex-shrink-0">
+    <h2 class="text-xl font-semibold text-[#093045]">
       Registration
     </h2>
-    <p class="text-gray-500 text-sm mt-1">
+    <p class="text-gray-500 text-xs mt-1">
       <a href="/manage_users" class="hover:underline">
         Manage user accounts
       </a>
@@ -28,45 +28,46 @@
   </div>
 
   <!-- ================= ENROLLMENT FORM ================= -->
-  <div class="bg-white rounded-lg shadow p-6 mb-8">
+  <div class="bg-white rounded-lg shadow p-4 mb-6 overflow-auto flex-1">
 
-    <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <form method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-3 min-w-[300px]">
 
-      <!-- Personal Info -->
-      <div class="md:col-span-2">
-        <h4 class="text-md font-bold text-[#093045] border-b pb-2">
+      <!-- Personal Info Header -->
+      <div class="md:col-span-3 mb-2">
+        <h4 class="text-sm font-semibold text-[#093045] border-b pb-1">
           Personal Information
         </h4>
       </div>
 
+      <!-- Personal Info Fields -->
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">First Name</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">First Name</label>
         <input type="text" name="first_name" required
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
       </div>
 
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Middle Name</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">Middle Name</label>
         <input type="text" name="middle_name"
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
       </div>
 
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Last Name</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">Last Name</label>
         <input type="text" name="last_name" required
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
       </div>
 
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Date of Birth</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">Date of Birth</label>
         <input type="date" name="dob" required
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
       </div>
 
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Gender</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">Gender</label>
         <select name="gender" required
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
           <option value="">-- Select Gender --</option>
           <option>Male</option>
           <option>Female</option>
@@ -74,28 +75,29 @@
       </div>
 
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Phone Number</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">Phone Number</label>
         <input type="text" name="phone"
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
       </div>
 
-      <div class="flex flex-col md:col-span-2">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Email Address</label>
+      <div class="flex flex-col md:col-span-3">
+        <label class="text-xs font-medium text-[#093045] mb-1">Email Address</label>
         <input type="email" name="email"
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm w-full">
       </div>
 
-      <!-- Enrollment Info -->
-      <div class="md:col-span-2 mt-6">
-        <h4 class="text-md font-bold text-[#093045] border-b pb-2">
+      <!-- Enrollment Info Header -->
+      <div class="md:col-span-3 mt-3 mb-2">
+        <h4 class="text-sm font-semibold text-[#093045] border-b pb-1">
           Enrollment Information
         </h4>
       </div>
 
+      <!-- Enrollment Info Fields -->
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Institution</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">Institution</label>
         <select name="institution_id" required
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
           <option value="">-- Select Institution --</option>
           {% for inst in institutions %}
           <option value="{{ inst[0] }}">{{ inst[1] }}</option>
@@ -104,9 +106,9 @@
       </div>
 
       <div class="flex flex-col">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Course</label>
+        <label class="text-xs font-medium text-[#093045] mb-1">Course</label>
         <select name="course_id" required
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
           <option value="">-- Select Course --</option>
           {% for course in courses %}
           <option value="{{ course[0] }}">{{ course[1] }}</option>
@@ -114,89 +116,20 @@
         </select>
       </div>
 
-      <div class="flex flex-col md:col-span-2">
-        <label class="text-sm font-semibold text-[#093045] mb-1">Enrollment Date</label>
+      <div class="flex flex-col">
+        <label class="text-xs font-medium text-[#093045] mb-1">Enrollment Date</label>
         <input type="date" name="enrollment_date" required
-          class="border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#0d755f] focus:outline-none">
+          class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
       </div>
 
-      <div class="md:col-span-2 mt-4">
+      <div class="md:col-span-3 mt-3">
         <button type="submit"
-          class="bg-[#0d755f] text-white px-6 py-2 rounded hover:bg-[#1b7a74] transition">
+          class="bg-[#0d755f] text-white px-4 py-1 rounded hover:bg-[#1b7a74] text-sm transition w-full">
           Save Enrollment
         </button>
       </div>
 
     </form>
-  </div>
-
-  <!-- ================= CREATE USER MODAL ================= -->
-  <div id="userModal"
-       class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-
-    <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-4 animate-fadeIn">
-
-      <h3 class="text-[#093045] font-bold text-lg">
-        Add User Account
-      </h3>
-
-      <form method="POST" action="/manage_users" class="space-y-3">
-        <input type="hidden" name="action" value="create">
-
-        <div class="flex flex-col">
-          <label class="text-sm font-semibold text-[#093045] mb-1">Enrolled Member</label>
-          <select name="person_id" required
-            class="border border-gray-300 rounded p-2">
-            <option value="">-- Select Enrolled Member --</option>
-            {% for p in persons %}
-            <option value="{{ p[0] }}">{{ p[1] }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="flex flex-col">
-          <label class="text-sm font-semibold text-[#093045] mb-1">Username</label>
-          <input type="text" name="username" required
-            class="border border-gray-300 rounded p-2">
-        </div>
-
-        <div class="flex flex-col">
-          <label class="text-sm font-semibold text-[#093045] mb-1">Email</label>
-          <input type="email" name="email" required
-            class="border border-gray-300 rounded p-2">
-        </div>
-
-        <div class="flex flex-col">
-          <label class="text-sm font-semibold text-[#093045] mb-1">Password</label>
-          <input type="password" name="password" required
-            class="border border-gray-300 rounded p-2">
-        </div>
-
-        <div class="flex flex-col">
-          <label class="text-sm font-semibold text-[#093045] mb-1">Role</label>
-          <select name="role" required
-            class="border border-gray-300 rounded p-2">
-            <option value="Admin">Admin</option>
-            <option value="Staff">Staff</option>
-            <option value="User">User</option>
-          </select>
-        </div>
-
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="submit"
-            class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">
-            Create
-          </button>
-
-          <button type="button"
-            onclick="closeUserModal()"
-            class="border px-4 py-2 rounded">
-            Cancel
-          </button>
-        </div>
-
-      </form>
-    </div>
   </div>
 
 </div>

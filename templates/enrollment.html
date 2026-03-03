@@ -10,194 +10,214 @@
 
 <body class="flex bg-[#f5fafc] font-sans h-screen overflow-hidden">
 
-{% include "partials/sidebar.html" %}
+  {% include "partials/sidebar.html" %}
 
-<div class="container mx-auto p-4 h-full flex flex-col">
+  <div class="container mx-auto p-4 h-full flex flex-col">
 
-  <h2 class="text-2xl font-bold text-[#093045] mb-4">Add Enrollment</h2>
+    <h2 class="text-2xl font-bold text-[#093045] mb-4">Add Enrollment</h2>
 
-  {% if error %}
-  <p class="bg-[#7d091c] text-white font-bold px-3 py-2 rounded mb-4">{{ error }}</p>
-  {% endif %}
+    {% if error %}
+    <p class="bg-[#7d091c] text-white font-bold px-3 py-2 rounded mb-4">{{ error }}</p>
+    {% endif %}
 
-  <!-- Enrollment Form -->
-  <form method="POST" class="bg-white p-4 rounded-lg shadow mb-6">
+    <!-- Enrollment Form -->
+    <!-- Enrollment Form -->
+<form method="POST" class="bg-white p-4 rounded-lg shadow mb-4">
+  <input type="hidden" name="add_enrollment" value="1">
 
-    <input type="hidden" name="add_enrollment" value="1">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 min-w-[300px]">
 
-    <!-- Horizontal Fields -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div>
+      <label class="block text-xs font-medium text-[#093045] mb-1">Person:</label>
+      <select name="person_id" required
+        class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
+        {% for p in persons %}
+        <option value="{{ p[0] }}">{{ p[1] }} {{ p[2] }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-      <div>
-        <label class="block font-semibold mb-1">Person:</label>
-        <select name="person_id" required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
+    <div>
+      <label class="block text-xs font-medium text-[#093045] mb-1">Institution:</label>
+      <select name="institution_id" required
+        class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
+        {% for i in institutions %}
+        <option value="{{ i[0] }}">{{ i[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-[#093045] mb-1">Course:</label>
+      <select name="course_id" required
+        class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
+        {% for c in courses %}
+        <option value="{{ c[0] }}">{{ c[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-[#093045] mb-1">Enrollment Date:</label>
+      <input type="date" name="enrollment_date" required
+        class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
+    </div>
+
+  </div>
+
+  <div class="mt-4">
+    <button type="submit"
+      class="bg-[#0d755f] text-white px-6 py-2 rounded hover:bg-[#1b7a74] transition text-sm">
+      Add Enrollment
+    </button>
+  </div>
+</form>
+
+    <!-- Search -->
+    <div class="mb-4">
+      <input type="text" id="searchInput"
+        placeholder="Search enrollments..."
+        class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-lg shadow flex-1 overflow-hidden">
+      <div class="h-full overflow-auto">
+
+        <table id="enrollmentTable" class="min-w-full border border-gray-200 text-left text-sm">
+
+          <thead class="bg-[#f5fafc] text-[#093045] font-bold sticky top-0 z-10">
+            <tr>
+              <th class="py-2 px-3 border-b">ID</th>
+              <th class="py-2 px-3 border-b">Person</th>
+              <th class="py-2 px-3 border-b">Institution</th>
+              <th class="py-2 px-3 border-b">Course</th>
+              <th class="py-2 px-3 border-b">Date</th>
+              <th class="py-2 px-3 border-b">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+              {% for r in records %}
+              <tr class="hover:bg-gray-50">
+                <td class="py-2 px-3 border-b">{{ r[0] }}</td>
+                <td class="py-2 px-3 border-b">{{ r[1] }}</td>
+                <td class="py-2 px-3 border-b">{{ r[3] }}</td>
+                <td class="py-2 px-3 border-b">{{ r[5] }}</td>
+                <td class="py-2 px-3 border-b">{{ r[6] }}</td>
+                <td class="py-2 px-3 border-b space-x-2">
+
+                  <button onclick="openEdit(
+                      '{{ r[0] }}',
+                      '{{ r[6] }}',
+                      '{{ r.person_id }}',
+                      '{{ r.institution_id }}',
+                      '{{ r.course_id }}'
+                    )"
+                    class="px-2 py-1 border border-[#f5fafc] text-[#093045] rounded hover:bg-gray-100 text-sm">
+                    Edit
+                  </button>
+
+                  {% if r[7]==1 %}
+                    <button disabled
+                      class="px-2 py-1 bg-gray-400 text-white rounded cursor-not-allowed text-sm">
+                      Delete
+                    </button>
+                  {% else %}
+                    <button onclick="confirmDelete('{{ r[0] }}')"
+                      class="px-2 py-1 bg-[#7d091c] text-white rounded hover:bg-[#5a060f] text-sm">
+                      Delete
+                    </button>
+                  {% endif %}
+
+                  {% if r[7]==1 %}
+                    <button disabled
+                      class="px-2 py-1 bg-gray-400 text-white rounded cursor-not-allowed text-sm">
+                      Graduated
+                    </button>
+                  {% else %}
+                    <button onclick="completeGraduate('{{ r[0] }}', this)"
+                      class="px-2 py-1 bg-[#0d755f] text-white rounded hover:bg-[#1b7a74] transition text-sm">
+                      Graduate
+                    </button>
+                  {% endif %}
+
+                </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+
+<!-- Edit Modal -->
+<div id="editBox"
+     class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+
+    <h3 class="text-lg font-bold mb-4 text-[#093045]">Edit Enrollment</h3>
+
+    <form method="POST" id="editForm">
+      <input type="hidden" name="edit_id" id="edit_id">
+
+      <!-- Person -->
+      <div class="mb-4">
+        <label class="block text-xs font-medium text-[#093045] mb-1">Person:</label>
+        <select name="person_id" id="edit_person" required
+                class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
           {% for p in persons %}
           <option value="{{ p[0] }}">{{ p[1] }} {{ p[2] }}</option>
           {% endfor %}
         </select>
       </div>
 
-      <div>
-        <label class="block font-semibold mb-1">Institution:</label>
-        <select name="institution_id" required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
+      <!-- Institution -->
+      <div class="mb-4">
+        <label class="block text-xs font-medium text-[#093045] mb-1">Institution:</label>
+        <select name="institution_id" id="edit_institution" required
+                class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
           {% for i in institutions %}
           <option value="{{ i[0] }}">{{ i[1] }}</option>
           {% endfor %}
         </select>
       </div>
 
-      <div>
-        <label class="block font-semibold mb-1">Course:</label>
-        <select name="course_id" required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
+      <!-- Course -->
+      <div class="mb-4">
+        <label class="block text-xs font-medium text-[#093045] mb-1">Course:</label>
+        <select name="course_id" id="edit_course" required
+                class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
           {% for c in courses %}
           <option value="{{ c[0] }}">{{ c[1] }}</option>
           {% endfor %}
         </select>
       </div>
 
-      <div>
-        <label class="block font-semibold mb-1">Enrollment Date:</label>
-        <input type="date" name="enrollment_date" required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
+      <!-- Enrollment Date -->
+      <div class="mb-4">
+        <label class="block text-xs font-medium text-[#093045] mb-1">Enrollment Date:</label>
+        <input type="date" name="enrollment_date" id="edit_date" required
+               class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d755f]">
       </div>
 
-    </div>
-
-    <!-- Button Below -->
-    <div class="mt-4">
-      <button type="submit"
-        class="bg-[#0d755f] text-white px-6 py-2 rounded hover:bg-[#1b7a74] transition">
-        Add Enrollment
-      </button>
-    </div>
-
-  </form>
-
-  <!-- Search -->
-  <div class="mb-4">
-    <input type="text" id="searchInput"
-      placeholder="Search enrollments..."
-      class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
-  </div>
-
-  <!-- Scrollable Table Section -->
-  <div class="bg-white rounded-lg shadow flex-1 overflow-hidden">
-
-    <div class="h-full overflow-y-auto">
-
-      <table id="enrollmentTable" class="min-w-full border border-gray-200 text-center">
-
-        <thead class="bg-[#f5fafc] text-[#093045] font-bold sticky top-0 z-10">
-          <tr>
-            <th class="py-2 px-4 border-b">ID</th>
-            <th class="py-2 px-4 border-b">Person</th>
-            <th class="py-2 px-4 border-b">Institution</th>
-            <th class="py-2 px-4 border-b">Course</th>
-            <th class="py-2 px-4 border-b">Date</th>
-            <th class="py-2 px-4 border-b">Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for r in records %}
-          <tr class="hover:bg-gray-50">
-            <td class="py-2 px-4 border-b">{{ r[0] }}</td>
-            <td class="py-2 px-4 border-b">{{ r[1] }}</td>
-            <td class="py-2 px-4 border-b">{{ r[3] }}</td>
-            <td class="py-2 px-4 border-b">{{ r[5] }}</td>
-            <td class="py-2 px-4 border-b">{{ r[6] }}</td>
-            <td class="py-2 px-4 border-b space-x-2">
-
-              <button onclick="openEdit('{{ r[0] }}','{{ r[4] }}')"
-                class="px-2 py-1 border border-[#f5fafc] text-[#093045] rounded hover:bg-gray-100">
-                Edit
-              </button>
-
-              <button onclick="confirmDelete('{{ r[0] }}')"
-                class="px-2 py-1 bg-[#7d091c] text-white rounded hover:bg-[#5a060f]">
-                Delete
-              </button>
-
-              {% if r[7]==1 %}
-              <button disabled
-                class="px-2 py-1 bg-gray-400 text-white rounded cursor-not-allowed">
-                Graduated
-              </button>
-                {% else %}
-                <button onclick="completeGraduate('{{ r[0] }}', this)"
-                    class="px-2 py-1 bg-[#0d755f] text-white rounded hover:bg-[#1b7a74] transition">
-                    Graduate
-                </button>
-                {% endif %}
-
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-
-      </table>
-
-    </div>
-  </div>
-
-</div>
-
-<!-- Edit Modal -->
-<div id="editBox"
-  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 hidden">
-
-  <div class="bg-white p-6 rounded-lg shadow w-96">
-    <h3 class="text-xl font-bold mb-4">Edit Enrollment</h3>
-
-    <form method="POST">
-      <input type="hidden" name="edit_id" id="edit_id">
-
-      <div>
-        <label class="block font-semibold mb-1">Institution:</label>
-        <select name="institution_id" required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
-          {% for i in institutions %}
-          <option value="{{ i[0] }}">{{ i[1] }}</option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <div class="mt-2">
-        <label class="block font-semibold mb-1">Course:</label>
-        <select name="course_id" required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
-          {% for c in courses %}
-          <option value="{{ c[0] }}">{{ c[1] }}</option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <div class="mt-2">
-        <label class="block font-semibold mb-1">Date:</label>
-        <input type="date" name="enrollment_date" id="edit_date"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]">
-      </div>
-
-      <div class="mt-4 flex justify-end space-x-2">
-        <button type="submit"
-          class="px-4 py-2 border border-[#f5fafc] text-[#093045] rounded hover:bg-gray-100">
-          Confirm
-        </button>
-
+      <div class="flex justify-end gap-2">
         <button type="button" onclick="closeEdit()"
-          class="px-4 py-2 border border-[#f5fafc] text-[#093045] rounded hover:bg-gray-100">
-          Cancel
+                class="px-4 py-2 border rounded hover:bg-gray-100 text-sm">Cancel</button>
+        <button type="submit"
+                class="px-4 py-2 bg-[#0d755f] text-white rounded hover:bg-[#1b7a74] transition text-sm">
+          Save
         </button>
       </div>
-
     </form>
+
   </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
 </html>

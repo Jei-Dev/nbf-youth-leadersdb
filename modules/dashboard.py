@@ -198,21 +198,31 @@ def chart_course_year():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT c.course_short_name,
-               YEAR(g.graduation_date),
-               COUNT(*)
+        SELECT i.inst_short_name,        -- ✅ FIXED COLUMN NAME
+               c.course_short_name,
+               COUNT(*) as total_graduates
         FROM Graduate g
         INNER JOIN Enrollment e ON g.enrollment_id = e.enrollment_id
         INNER JOIN Course c ON e.course_id = c.course_id
-        GROUP BY c.course_short_name, YEAR(g.graduation_date)
-        ORDER BY YEAR(g.graduation_date)
+        INNER JOIN Institution i ON e.institution_id = i.institution_id
+        GROUP BY i.inst_short_name, c.course_short_name
+        ORDER BY i.inst_short_name, c.course_short_name
     """)
 
     rows = cursor.fetchall()
     conn.close()
 
-    return jsonify(rows)
+    data = []
+    for r in rows:
+        data.append({
+            "institution": r[0],
+            "course": r[1],
+            "count": r[2]
+        })
 
+    return jsonify(data)
+
+#----------graduates Vs enrollments
 @dash_bp.route("/api/chart/enrollments_per_institution")
 def chart_enrollments_per_institution():
     conn = get_connection()
