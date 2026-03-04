@@ -22,7 +22,7 @@
     </div>
     {% endif %}
 
-    <form method="POST" class="space-y-4">
+    <form method="POST" novalidate class="space-y-4">
 
       <div>
         <label class="block mb-1 font-semibold text-gray-600">Username</label>
@@ -46,5 +46,6 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/val.js') }}"></script>
 </body>
 </html>

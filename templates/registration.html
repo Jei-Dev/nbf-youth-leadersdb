@@ -30,7 +30,7 @@
   <!-- ================= ENROLLMENT FORM ================= -->
   <div class="bg-white rounded-lg shadow p-4 mb-6 overflow-auto flex-1">
 
-    <form method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-3 min-w-[300px]">
+    <form method="POST" novalidate class="grid grid-cols-1 md:grid-cols-3 gap-3 min-w-[300px]">
 
       <!-- Personal Info Header -->
       <div class="md:col-span-3 mb-2">
@@ -135,6 +135,7 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/val.js') }}"></script>
 
 </body>
 </html>

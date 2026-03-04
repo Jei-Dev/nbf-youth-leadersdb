@@ -24,7 +24,7 @@
     <div class="bg-white p-6 rounded-xl shadow mb-6">
       <h3 class="text-xl font-semibold mb-4 text-[#093045]">Add New User</h3>
 
-      <form method="POST" class="grid md:grid-cols-3 gap-4">
+      <form method="POST" novalidate class="grid md:grid-cols-3 gap-4">
         <input type="hidden" name="action" value="create">
 
         <div>
@@ -106,5 +106,6 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/val.js') }}"></script>
 </body>
 </html>

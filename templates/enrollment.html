@@ -22,7 +22,7 @@
 
     <!-- Enrollment Form -->
     <!-- Enrollment Form -->
-<form method="POST" class="bg-white p-4 rounded-lg shadow mb-4">
+<form method="POST" novalidate class="bg-white p-4 rounded-lg shadow mb-4">
   <input type="hidden" name="add_enrollment" value="1">
 
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 min-w-[300px]">
@@ -218,6 +218,6 @@
 </div>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
+  <script src="{{ url_for('static', filename='js/val.js') }}"></script>
 </body>
 </html>
