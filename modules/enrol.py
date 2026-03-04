@@ -9,6 +9,16 @@ def enrollment():
     conn = get_connection()
     cursor = conn.cursor()
 
+    from flask import session, redirect
+
+    # 🔐 Must be logged in
+    if "role" not in session:
+        return redirect("/login")
+
+    # 🚫 User cannot access enrollment
+    if session["role"] == "User":
+        return redirect("/registration")
+
     # error function
     error = request.args.get("error")
 

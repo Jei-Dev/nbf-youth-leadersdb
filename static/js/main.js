@@ -77,3 +77,36 @@ function confirmUserDelete(userId) {
         .then(response => response.ok ? location.reload() : alert("Failed to delete user."));
     }
 }
+
+// ----------------------- INSTITUTION & COURSE MODALS -----------------------
+function openInst() {
+    const modal = document.getElementById("instModal");
+    if (modal) modal.classList.remove("hidden");
+}
+
+function closeInst() {
+    const modal = document.getElementById("instModal");
+    if (modal) modal.classList.add("hidden");
+}
+
+function openCourse() {
+    const modal = document.getElementById("courseModal");
+    if (modal) modal.classList.remove("hidden");
+}
+
+function closeCourse() {
+    const modal = document.getElementById("courseModal");
+    if (modal) modal.classList.add("hidden");
+}
+
+// Optional: close modal when clicking outside content
+document.addEventListener("click", function(e) {
+    const instModal = document.getElementById("instModal");
+    if(instModal && !instModal.querySelector("div").contains(e.target) && !e.target.matches("button")) {
+        instModal.classList.add("hidden");
+    }
+    const courseModal = document.getElementById("courseModal");
+    if(courseModal && !courseModal.querySelector("div").contains(e.target) && !e.target.matches("button")) {
+        courseModal.classList.add("hidden");
+    }
+});

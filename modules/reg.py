@@ -12,6 +12,22 @@ serializer = URLSafeTimedSerializer("SUPER_SECRET_KEY_CHANGE_THIS")
 @reg_bp.route("/registration", methods=["GET", "POST"])
 def youth_registration():
 
+    from flask import session, redirect
+
+    # 🔐 If logged in:
+    if "role" in session:
+
+        # Admin & Staff can access
+        if session["role"] in ["Admin", "Staff"]:
+            pass
+
+        # User can access (this is their only page)
+        elif session["role"] == "User":
+            pass
+    else:
+        # Not logged in → redirect to login
+        return redirect("/login")
+
     conn = get_connection()
     cursor = conn.cursor()
 

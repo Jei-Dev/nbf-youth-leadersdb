@@ -14,11 +14,12 @@ def roles_required(*roles):
     def wrapper(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            if "role" not in session:
+
+            if "user_id" not in session:
                 return redirect(url_for("auth.login"))
 
-            if session["role"] not in roles:
-                return "Access Denied: Unauthorized Role"
+            if session.get("role") not in roles:
+                return redirect(url_for("auth.login"))
 
             return f(*args, **kwargs)
         return decorated_function

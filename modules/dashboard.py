@@ -8,9 +8,17 @@ dash_bp = Blueprint("dash", __name__)
 # ---------------- DASHBOARD PAGE ----------------
 @dash_bp.route("/dashboard")
 def dashboard():
-    """
-    Serve the dashboard page with summary stats.
-    """
+
+    # 🔐 Must be logged in
+    from flask import session, redirect
+
+    if "role" not in session:
+        return redirect("/login")
+
+    # 🚫 User role can ONLY access registration
+    if session["role"] == "User":
+        return redirect("/registration")
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -22,7 +30,7 @@ def dashboard():
     cursor.execute("SELECT COUNT(*) FROM Graduate")
     total_graduates = cursor.fetchone()[0]
 
-    # Pending graduates (enrollments not yet in Graduate table)
+    # Pending graduates
     cursor.execute("""
         SELECT COUNT(*) 
         FROM Enrollment e

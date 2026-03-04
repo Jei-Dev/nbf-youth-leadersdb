@@ -14,33 +14,36 @@ def login():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # ================= BOOTSTRAP FIRST ADMIN =================
     cursor.execute("SELECT COUNT(*) FROM Users")
     user_count = cursor.fetchone()[0]
     if user_count == 0:
         conn.close()
-        return redirect("/setup_admin")  # redirect to setup first admin
+        return redirect("/setup_admin")
 
-    # ---------------- LOGIN PROCESS ----------------
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
         cursor.execute("""
-            SELECT user_id, password_hash, is_verified, role
+            SELECT user_id, password_hash, role
             FROM Users WHERE username=?
         """, (username,))
         user = cursor.fetchone()
 
         if user and check_password_hash(user[1], password):
-            if user[2] == 0:
-                conn.close()
-                return "Please verify your email first."
 
             session["user_id"] = user[0]
-            session["role"] = user[3]
+            session["role"] = user[2]
+
             conn.close()
-            return redirect("/dashboard")
+
+            # 🔥 ROLE BASED REDIRECTION
+            if user[2] == "Admin":
+                return redirect("/dashboard")
+            elif user[2] == "Staff":
+                return redirect("/dashboard")
+            else:
+                return redirect("/registration")
 
         conn.close()
         return "Invalid credentials"

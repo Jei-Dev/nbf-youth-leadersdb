@@ -6,6 +6,16 @@ grad_bp = Blueprint("grad", __name__)
 @grad_bp.route("/add_graduate", methods=["POST"])
 def add_graduate():
 
+    from flask import session, redirect
+
+    # 🔐 Must be logged in
+    if "role" not in session:
+        return redirect("/login")
+
+    # 🚫 User cannot graduate
+    if session["role"] == "User":
+        return redirect(url_for("dash.dashboard", restricted=1))
+
     conn = get_connection()
     cursor = conn.cursor()
 

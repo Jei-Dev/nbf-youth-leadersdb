@@ -20,6 +20,7 @@
       <p>You can add, update, or delete user accounts here.</p>
     </a>
 
+    <!-- Buttons to open modals -->
     <div class="flex gap-4 mb-6">
       <button onclick="openInst()" class="bg-[#0d755f] text-white px-4 py-2 rounded hover:bg-[#1b7a74]">
         Add Institution
@@ -29,8 +30,59 @@
       </button>
     </div>
 
+    <!-- ================= TABLES SECTION ================= -->
+    <div class="grid grid-cols-2 gap-6 mt-6">
+  <!-- Institutions Table -->
+  <div class="bg-white rounded shadow p-4">
+    <h3 class="text-[#093045] font-bold text-lg mb-2">Institutions</h3>
+    <div class="overflow-y-auto max-h-64 border border-gray-200 rounded">
+      <table class="min-w-full border-collapse">
+        <thead class="bg-gray-100 sticky top-0">
+          <tr>
+            <th class="p-2 text-left border-b">Institution Name</th>
+            <th class="p-2 text-left border-b">Short Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for inst in institutions %}
+          <tr>
+            <td class="p-2 border-b">{{ inst[0] }}</td>
+            <td class="p-2 border-b">{{ inst[1] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Courses Table -->
+  <div class="bg-white rounded shadow p-4">
+    <h3 class="text-[#093045] font-bold text-lg mb-2">Courses</h3>
+    <div class="overflow-y-auto max-h-64 border border-gray-200 rounded">
+      <table class="min-w-full border-collapse">
+        <thead class="bg-gray-100 sticky top-0">
+          <tr>
+            <th class="p-2 text-left border-b">Course Name</th>
+            <th class="p-2 text-left border-b">Short Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for course in courses %}
+          <tr>
+            <td class="p-2 border-b">{{ course[0] }}</td>
+            <td class="p-2 border-b">{{ course[1] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+    <!-- ================= MODALS (unchanged) ================= -->
+
     <!-- Institution Modal -->
-    <div id="instModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+    <div id="instModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4 z-50">
       <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-4">
         <h3 class="text-[#093045] font-bold text-lg">Add Institution</h3>
         <form method="POST" class="space-y-2">
@@ -45,7 +97,7 @@
     </div>
 
     <!-- Course Modal -->
-    <div id="courseModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+    <div id="courseModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4 z-50">
       <div class="bg-white rounded-lg p-6 w-full max-w-md space-y-4">
         <h3 class="text-[#093045] font-bold text-lg">Add Course</h3>
         <form method="POST" class="space-y-2">
@@ -63,5 +115,6 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/val.js') }}"></script>
 </body>
 </html>
