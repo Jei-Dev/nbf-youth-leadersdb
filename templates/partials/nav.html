@@ -1,0 +1,50 @@
+<!-- ================= NAVBAR PARTIAL ================= -->
+<nav class="bg-[#1b7a74] text-white flex justify-between items-center h-12 px-4 flex-shrink-0">
+  <h1 class="text-lg md:text-xl font-bold truncate">Youth Leaders Dashboard</h1>
+
+  <div class="relative">
+    <button id="settingsBtn" class="focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-6 w-6 cursor-pointer hover:rotate-90 transition-transform duration-300"
+           fill="none"
+           viewBox="0 0 24 24"
+           stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11.983 2.25c.27 0 .533.11.725.302l.89.89a1.02 1.02 0 001.054.23l1.192-.397a1 1 0 011.26.63l.397 1.192c.14.42.48.754.9.9l1.192.397a1 1 0 01.63 1.26l-.397 1.192a1.02 1.02 0 00.23 1.054l.89.89a1 1 0 010 1.45l-.89.89a1.02 1.02 0 00-.23 1.054l.397 1.192a1 1 0 01-.63 1.26l-1.192.397a1.02 1.02 0 00-.9.9l-.397 1.192a1 1 0 01-1.26.63l-1.192-.397a1.02 1.02 0 00-1.054.23l-.89.89a1 1 0 01-1.45 0l-.89-.89a1.02 1.02 0 00-1.054-.23l-1.192.397a1 1 0 01-1.26-.63l-.397-1.192a1.02 1.02 0 00-.9-.9l-1.192-.397a1 1 0 01-.63-1.26l.397-1.192a1.02 1.02 0 00-.23-1.054l-.89-.89a1 1 0 010-1.45l.89-.89a1.02 1.02 0 00.23-1.054l-.397-1.192a1 1 0 01.63-1.26l1.192-.397a1.02 1.02 0 00.9-.9l.397-1.192a1 1 0 011.26-.63l1.192.397c.374.125.786.028 1.054-.23l.89-.89a1 1 0 01.725-.302z"/>
+      </svg>
+    </button>
+
+    <div id="dropdownMenu"
+         class="hidden absolute right-0 mt-1 w-36 bg-white text-[#093045] rounded-lg shadow overflow-hidden z-50">
+      <a href="/manage_users"
+         class="flex items-center gap-1 px-3 py-1 hover:bg-gray-100">
+        ➕ <span>User</span>
+      </a>
+      <a href="/login"
+         class="flex items-center gap-1 px-3 py-1 hover:bg-gray-100">
+        ⏻ <span>Logout</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const settingsBtn = document.getElementById("settingsBtn");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+  if (settingsBtn && dropdownMenu) {
+    settingsBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent click from bubbling
+      dropdownMenu.classList.toggle("hidden");
+    });
+
+    // Hide dropdown if click outside
+    document.addEventListener("click", () => {
+      if (!dropdownMenu.classList.contains("hidden")) {
+        dropdownMenu.classList.add("hidden");
+      }
+    });
+  }
+});
+</script>
