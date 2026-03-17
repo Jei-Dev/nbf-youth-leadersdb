@@ -110,3 +110,4 @@ document.addEventListener("click", function(e) {
         courseModal.classList.add("hidden");
     }
 });
+

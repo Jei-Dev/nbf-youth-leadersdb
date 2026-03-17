@@ -7,13 +7,16 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="flex bg-[#f5fafc] font-sans min-h-screen">
+<body class="flex flex-col bg-[#f5fafc] font-sans min-h-screen">
+  
+  {% include "partials/nav.html" %}
 
-<!-- ================= SIDEBAR ================= -->
-{% include "partials/sidebar.html" %}
+  
+  <div class="flex flex-1 overflow-hidden">
+    {% include "partials/sidebar.html" %}
 
 <!-- ================= MAIN CONTENT ================= -->
-<div class="flex-1 p-4 transition-all duration-300 flex flex-col">
+<div class="flex-1 p-2 transition-all duration-300 flex flex-col">
 
   <!-- HEADER -->
   <div class="mb-4 flex-shrink-0">
@@ -28,12 +31,12 @@
   </div>
 
   <!-- ================= ENROLLMENT FORM ================= -->
-  <div class="bg-white rounded-lg shadow p-4 mb-6 overflow-auto flex-1">
+  <div class="bg-white rounded-lg shadow p-2 mb-2 overflow-auto flex-1">
 
     <form method="POST" novalidate class="grid grid-cols-1 md:grid-cols-3 gap-3 min-w-[300px]">
 
       <!-- Personal Info Header -->
-      <div class="md:col-span-3 mb-2">
+      <div class="md:col-span-3 mb-1">
         <h4 class="text-sm font-semibold text-[#093045] border-b pb-1">
           Personal Information
         </h4>
@@ -87,7 +90,7 @@
       </div>
 
       <!-- Enrollment Info Header -->
-      <div class="md:col-span-3 mt-3 mb-2">
+      <div class="md:col-span-3 mt-2 mb-1">
         <h4 class="text-sm font-semibold text-[#093045] border-b pb-1">
           Enrollment Information
         </h4>
@@ -122,9 +125,9 @@
           class="border border-gray-300 rounded p-1 focus:ring-1 focus:ring-[#0d755f] focus:outline-none text-sm">
       </div>
 
-      <div class="md:col-span-3 mt-3">
+      <div class="md:col-span-3 mt-2">
         <button type="submit"
-          class="bg-[#0d755f] text-white px-4 py-1 rounded hover:bg-[#1b7a74] text-sm transition w-full">
+          class="bg-[#0d755f] text-white px-2 py-1 rounded hover:bg-[#1b7a74] text-sm transition w-full">
           Save Enrollment
         </button>
       </div>

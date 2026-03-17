@@ -1,41 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Graduates</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
-    <!-- Graduates Table -->
-    <div class="bg-white rounded-lg shadow p-4 mb-6">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
-        <h2 class="text-[#093045] font-bold text-lg">Graduates List</h2>
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Search graduates..." 
-          class="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]"
-        >
-      </div>
-      <div class="overflow-y-auto max-h-96">
-        <table id="graduatesTable" class="min-w-full border border-gray-200">
-          <thead class="bg-[#f5fafc]">
-            <tr>
-              <th class="py-2 px-4 border-b text-center">Graduate ID</th>
-              <th class="py-2 px-4 border-b text-center">Name</th>
-              <th class="py-2 px-4 border-b text-center">Institution</th>
-              <th class="py-2 px-4 border-b text-center">Course</th>
-              <th class="py-2 px-4 border-b text-center">Graduation Date</th>
-              <th class="py-2 px-4 border-b text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graduates</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-[#f5fafc] h-screen flex flex-col overflow-hidden">
+
+<!-- NAVBAR -->
+{% include "partials/nav.html" %}
+
+<div class="flex flex-1 overflow-hidden">
+
+<!-- SIDEBAR -->
+{% include "partials/sidebar.html" %}
+
+<!-- MAIN CONTENT -->
+<main class="flex-1 p-4 overflow-hidden flex flex-col">
+
+<!-- ================= SUMMARY CARDS ================= -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+
+<div class="bg-white shadow rounded-lg p-4">
+<h3 class="text-sm text-gray-500">Institution With Most Graduates</h3>
+<p id="maxInstitution" class="text-lg font-bold text-[#093045]">-</p>
+</div>
+
+<div class="bg-white shadow rounded-lg p-4">
+<h3 class="text-sm text-gray-500">Institution With Least Graduates</h3>
+<p id="minInstitution" class="text-lg font-bold text-[#093045]">-</p>
+</div>
+
+<div class="bg-white shadow rounded-lg p-4">
+<h3 class="text-sm text-gray-500">Course With Most Graduates</h3>
+<p id="maxCourse" class="text-lg font-bold text-[#093045]">-</p>
+</div>
+
+<div class="bg-white shadow rounded-lg p-4">
+<h3 class="text-sm text-gray-500">Course With Least Graduates</h3>
+<p id="minCourse" class="text-lg font-bold text-[#093045]">-</p>
+</div>
+
+</div>
+
+
+<!-- ================= ACTION BAR ================= -->
+<div class="flex justify-between items-center mb-3">
+
+<button id="bulkPrint"
+class="bg-[#18d9b0] text-white px-4 py-2 rounded shadow hover:bg-[#0d755f]">
+Bulk Print
+</button>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search graduates..."
+class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#18d9b0]"
+>
+
+</div>
+
+
+<!-- ================= GRADUATES TABLE ================= -->
+<div class="bg-white rounded-lg shadow flex flex-col overflow-hidden">
+
+<div class="overflow-y-auto flex-1">
+
+<table id="graduatesTable" class="min-w-full text-sm">
+
+<thead class="bg-[#093045] text-white sticky top-0 z-10">
+<tr>
+
+<th class="py-2 px-3 text-center">Graduate ID</th>
+<th class="py-2 px-3 text-center">Name</th>
+<th class="py-2 px-3 text-center">Course</th>
+<th class="py-2 px-3 text-center">Institution</th>
+<th class="py-2 px-3 text-center">Status</th>
+<th class="py-2 px-3 text-center">Actions</th>
+
+</tr>
+</thead>
+
+<tbody class="text-gray-700">
+<!-- Populated by grad.js -->
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</main>
+</div>
+
+<script src="/static/js/grad.js"></script>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request, redirect,render_template, url_for 
 from config import get_connection
 
 grad_bp = Blueprint("grad", __name__)
@@ -40,3 +40,16 @@ def add_graduate():
     conn.close()
 
     return redirect("/enrollment")
+
+    
+
+@grad_bp.route("/view_graduates")
+def view_graduates():
+
+    from flask import session, redirect
+
+    # 🔐 Must be logged in
+    if "role" not in session:
+        return redirect("/login")
+
+    return render_template("view_graduates.html")
